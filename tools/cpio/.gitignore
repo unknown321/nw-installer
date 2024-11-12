@@ -1,0 +1,6 @@
+bin/
+usr/
+debian-binary
+control.tar.xz
+cpio*.deb
+data.tar.xz

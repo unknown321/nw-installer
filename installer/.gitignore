@@ -1,0 +1,5 @@
+*-arm5-linux
+*.UPG
+*.exe
+bin/
+userdata.tar
