@@ -3,10 +3,11 @@ SCSITOOL=scsitool-nwz-v27.exe
 SCSITOOL_URL=https://www.rockbox.org/realwiki/pub/Main/SonyNWDestTool/$(SCSITOOL)
 APPNAME ?= test
 OUTFILE ?= install.exe
+ECHO=/usr/bin/echo
 
 $(SCSITOOL):
 	wget $(SCSITOOL_URL)
-	echo "$(SCSITOOL_SHA256) $(SCSITOOL)" | sha256sum --check --status
+	$(ECHO) "$(SCSITOOL_SHA256) $(SCSITOOL)" | sha256sum --check --status
 
 $(OUTFILE): LICENSE.txt
 	makensis -DAPPNAME=$(APPNAME) -DOUTFILE=$(OUTFILE) script.nsh
@@ -18,7 +19,12 @@ veryclean: clean
 	-rm -f $(SCSITOOL)
 
 LICENSE.txt:
-	echo "License goes here" > $@
+	test -f LICENSE.txt.user || $(ECHO) "License goes here" > LICENSE.txt.user
+	cat LICENSE.txt.user > $@
+	$(ECHO) -e "\n***\nInstaller license:\n" >> $@
+	cat ../../LICENSE >> $@
+	$(ECHO) -e "\n***\nInstaller 3rd party licenses:\n" >> $@
+	cat ../../LICENSE_3rdparty.txt >> $@
 
 build: $(SCSITOOL) $(OUTFILE)
 
