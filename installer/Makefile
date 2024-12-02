@@ -77,7 +77,7 @@ upg:
 
 
 clean:
-	-rm -rf stock/ walkmanOne/ *.upx
+	-rm -rf stock/ walkmanOne/ *.upx userdata.tar
 	$(MAKE) -C windows clean
 
 veryclean: clean

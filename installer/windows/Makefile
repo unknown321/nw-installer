@@ -8,14 +8,17 @@ $(SCSITOOL):
 	wget $(SCSITOOL_URL)
 	echo "$(SCSITOOL_SHA256) $(SCSITOOL)" | sha256sum --check --status
 
-$(OUTFILE):
+$(OUTFILE): LICENSE.txt
 	makensis -DAPPNAME=$(APPNAME) -DOUTFILE=$(OUTFILE) script.nsh
 
 clean:
-	-rm -f $(OUTFILE)
+	-rm -f $(OUTFILE) LICENSE.txt
 
 veryclean: clean
 	-rm -f $(SCSITOOL)
+
+LICENSE.txt:
+	echo "License goes here" > $@
 
 build: $(SCSITOOL) $(OUTFILE)
 
