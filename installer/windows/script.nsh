@@ -2,7 +2,9 @@ Name ${APPNAME}
 OutFile ${OUTFILE}
 RequestExecutionLevel admin
 
-Page license
+PageEx license
+    LicenseData LICENSE.txt
+PageExEnd
 Page custom connectUSB connectUSBLeave ": connect device"
 Page components
 Page custom reviewPage "" ": review"
