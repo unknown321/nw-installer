@@ -1,4 +1,6 @@
-ECHO=/usr/bin/echo
+ECHO=/bin/echo
+IMAGE=nw-crosstool
+DOCKER=docker run -t --rm -v `pwd`:`pwd` -w `pwd` $(IMAGE)
 
 veryclean: clean
 	$(MAKE) -C tools clean
@@ -25,6 +27,6 @@ LICENSE_3rdparty.txt:
 build: prepare
 	$(MAKE) -C installer stock
 	$(MAKE) -C installer walkmanOne
-	$(MAKE) -C installer/windows
+	$(DOCKER) $(MAKE) -C installer/windows
 
 .DEFAULT_GOAL := build

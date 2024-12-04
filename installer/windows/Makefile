@@ -3,7 +3,7 @@ SCSITOOL=scsitool-nwz-v27.exe
 SCSITOOL_URL=https://www.rockbox.org/realwiki/pub/Main/SonyNWDestTool/$(SCSITOOL)
 APPNAME ?= test
 OUTFILE ?= install.exe
-ECHO=/usr/bin/echo
+ECHO=/bin/echo
 
 $(SCSITOOL):
 	wget $(SCSITOOL_URL)
