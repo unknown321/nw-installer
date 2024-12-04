@@ -9,7 +9,7 @@ veryclean: clean
 clean:
 	$(MAKE) -C installer clean
 
-prepare: LICENSE_3rdparty.txt
+prepare_deps:
 	$(MAKE) -C crosstool
 	docker run -it --rm -v `pwd`:`pwd` -w `pwd` nw-crosstool bash -c "cd tools && make"
 	$(MAKE) -C installer prepare
@@ -23,6 +23,8 @@ LICENSE_3rdparty.txt:
 	@cat tools/upgtool/zlib-1.3.1/LICENSE >> $@
 	@$(ECHO) -e "\n***\ngzip, cpio, abootimg:\n" >> $@
 	@cat tools/gzip/gzip-1.13/COPYING >> $@
+
+prepare: prepare_deps LICENSE_3rdparty.txt
 
 build: prepare
 	$(MAKE) -C installer stock
