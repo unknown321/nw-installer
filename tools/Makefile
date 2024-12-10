@@ -4,8 +4,8 @@ build:
 	$(MAKE) -C gzip
 	$(MAKE) -C upx
 	$(MAKE) -C upgtool
-	GOCACHE=/tmp $(MAKE) -C mtkheader
-	GOCACHE=/tmp GOMODCACHE=/tmp $(MAKE) -C cpiostrip
+	GOCACHE=/tmp $(MAKE) -C mtkheader release
+	GOCACHE=/tmp GOMODCACHE=/tmp $(MAKE) -C cpiostrip release
 
 clean:
 	$(MAKE) -C abootimg clean
