@@ -21,7 +21,6 @@ prepare:
 UPGTOOL_DIR=rockbox/utils/nwztools/upgtools
 UPGTOOL_DIR=./upgtools
 $(UPGTOOL_DIR)/upgtool: prepare
-	$(MAKE) -C $(UPGTOOL_DIR) clean veryclean
 	export PATH="$(PPATH)" && \
 	$(MAKE) -C $(UPGTOOL_DIR) \
 		PREFIX=$(PLATFORM)- \
