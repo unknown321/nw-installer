@@ -20,7 +20,9 @@ prepare:
 
 UPGTOOL_DIR=rockbox/utils/nwztools/upgtools
 UPGTOOL_DIR=./upgtools
-$(UPGTOOL_DIR)/upgtool: prepare
+
+upgtool-$(EXEC_SUFFIX): prepare
+	$(MAKE) -C $(UPGTOOL_DIR) clean veryclean
 	export PATH="$(PPATH)" && \
 	$(MAKE) -C $(UPGTOOL_DIR) \
 		PREFIX=$(PLATFORM)- \
@@ -28,17 +30,14 @@ $(UPGTOOL_DIR)/upgtool: prepare
 		CXXFLAGS="-I$(ROOT_DIR)/" \
 		CFLAGS="-I$(ROOT_DIR)/zlib-$(ZLIB_VERSION) -I$(ROOT_DIR)/cryptopp -std=c11" \
 		LDLIBS="-lcryptopp -lz -lpthread"
+	mv $(UPGTOOL_DIR)/upgtool upgtool-$(EXEC_SUFFIX)
 
-upgtool-$(EXEC_SUFFIX): $(UPGTOOL_DIR)/upgtool
-	cp $(UPGTOOL_DIR)/upgtool upgtool-$(EXEC_SUFFIX)
-
-upgtool-$(ARCH):
+upgtool-$(ARCH): prepare
 	$(MAKE) -C $(UPGTOOL_DIR) clean veryclean
 	$(MAKE) -C $(UPGTOOL_DIR) \
 		CFLAGS="-std=c11" \
 		LDFLAGS="-s -static -L$(ROOT_DIR)/zlib-$(ZLIB_VERSION) -L$(ROOT_DIR)/cryptopp"
 	mv $(UPGTOOL_DIR)/upgtool upgtool-$(ARCH)
-
 
 SCSITOOL_DIR=rockbox/utils/nwztools/scsitools
 SCSITOOL_DIR=./scsitools
