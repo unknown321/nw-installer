@@ -21,7 +21,8 @@ prepare:
 UPGTOOL_DIR=rockbox/utils/nwztools/upgtools
 UPGTOOL_DIR=./upgtools
 
-upgtool-$(EXEC_SUFFIX): prepare
+upgtool-$(EXEC_SUFFIX):
+	$(MAKE) prepare
 	$(MAKE) -C $(UPGTOOL_DIR) clean veryclean
 	export PATH="$(PPATH)" && \
 	$(MAKE) -C $(UPGTOOL_DIR) \
@@ -32,7 +33,8 @@ upgtool-$(EXEC_SUFFIX): prepare
 		LDLIBS="-lcryptopp -lz -lpthread"
 	mv $(UPGTOOL_DIR)/upgtool upgtool-$(EXEC_SUFFIX)
 
-upgtool-$(ARCH): prepare
+upgtool-$(ARCH):
+	$(MAKE) prepare
 	$(MAKE) -C $(UPGTOOL_DIR) clean veryclean
 	$(MAKE) -C $(UPGTOOL_DIR) \
 		CFLAGS="-std=c11" \
@@ -60,4 +62,4 @@ clean:
 	-rm scsitool-$(ARCH)
 
 .DEFAULT_GOAL := build
-.PHONY: build
+.PHONY: build prepare clean
