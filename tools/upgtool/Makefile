@@ -31,7 +31,7 @@ $(UPGTOOL_DIR)/upgtool: prepare
 		LDLIBS="-lcryptopp -lz -lpthread"
 
 upgtool-$(EXEC_SUFFIX): $(UPGTOOL_DIR)/upgtool
-	mv $(UPGTOOL_DIR)/upgtool upgtool-$(EXEC_SUFFIX)
+	cp $(UPGTOOL_DIR)/upgtool upgtool-$(EXEC_SUFFIX)
 
 upgtool-$(ARCH):
 	$(MAKE) -C $(UPGTOOL_DIR) clean veryclean
