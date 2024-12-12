@@ -1,6 +1,6 @@
 [submodule "tools/mtkheader"]
 	path = tools/mtkheader
-	url = ssh://git@192.168.10.105:3002/unknown/mtkheader.git
+	url = https://github.com/unknown321/mtkheader
 [submodule "tools/cpiostrip"]
 	path = tools/cpiostrip
-	url = ssh://git@192.168.10.105:3002/unknown/cpiostrip.git
+	url = https://github.com/unknown321/cpiostrip
