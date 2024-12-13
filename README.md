@@ -43,7 +43,7 @@ docker image rm nw-crosstool && make prepare
 
 ### Usage:
 
-Pack your data and install script named `run.sh` into `userdata.tar`. See `installer/run.sh`.
+Pack your data and install script named `run.sh` into `userdata.tar`. See [installer/run.sh](./installer/run.sh).
 
   - copy `userdata.tar` into `installer` directory
   - run `make`
