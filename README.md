@@ -43,9 +43,8 @@ docker image rm nw-crosstool && make prepare
 
 ### Usage:
 
-  - copy `installer/run.sh` somewhere along with your binary
-  - edit `run.sh`
-  - pack `run.sh` and binary into `userdata.tar`
+Pack your data and install script named `run.sh` into `userdata.tar`. See `installer/run.sh`.
+
   - copy `userdata.tar` into `installer` directory
   - run `make`
   - grab UPG files from `installer/stock/` and `installer/walkmanOne`
