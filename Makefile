@@ -29,6 +29,6 @@ prepare: prepare_deps LICENSE_3rdparty.txt
 build: prepare
 	$(MAKE) -C installer stock
 	$(MAKE) -C installer walkmanOne
-	$(DOCKER) $(MAKE) -C installer/windows
+	$(DOCKER) $(MAKE) -C installer/windows OUTFILE=$(OUTFILE) APPNAME=$(APPNAME)
 
 .DEFAULT_GOAL := build
