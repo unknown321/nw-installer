@@ -121,7 +121,7 @@ Function reviewPage
     StrCpy $letterWithoutSlash $USBLetter 2
 FunctionEnd
 
-SectionGroup /e "Firmware"
+SectionGroup /e "Currently installed firmware?"
     section /o "WalkmanOne" FWWOne
         file "../walkmanOne/NW_WM_FW.UPG"
     sectionEnd
