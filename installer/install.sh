@@ -37,6 +37,7 @@ DD="/xbin/busybox dd"
 GUNZIP="/xbin/busybox gunzip"
 FIND="/xbin/busybox find"
 SORT="/xbin/busybox sort"
+GREP="/xbin/busybox grep"
 MD5SUM="/xbin/busybox md5sum"
 TAR="/xbin/busybox tar"
 INITRD_UNPACKED="${WORKDIR}/unpacked"
@@ -78,19 +79,33 @@ log()
 ##################################
 echo "------ FUNCTION ------"
 
-### nw-scrob functions
-
 # detectModel looks for patched fwpchk with modified decryption keys
 detectModel() {
-  echo "a05c9e867bb602cd410a6c895db2eb9f  /bin/fwpchk" | ${MD5SUM} -c
   # walkmanOne?
-  if test $? -eq 0; then
+  if test -f /opt2/stock/nv_bk; then
     MODEL=nw-wm1a
     WALKMAN_ONE_FLAG="-w"
     log "$MODEL, walkmanOne"
   else
     log "$MODEL"
   fi
+}
+
+infoCollect() {
+  log "==========================="
+  log "nvpflag -x mid: $(nvpflag -x mid)"
+  log "nvpstr fpi: $(nvpstr fpi)"
+  log "mem:"
+  log "$(cat /proc/meminfo)"
+  log "cpu:"
+  log "$(cat /proc/cpuinfo)"
+  log "emmc:"
+  log "$(cat /proc/emmc)"
+  log "storage:"
+  log "$(busybox df -h)"
+  log "busybox:"
+  log "$(busybox)"
+  log "==========================="
 }
 
 preflightTest() {
@@ -138,7 +153,7 @@ isAndroid() {
 
 getBlockDevice() {
   PARTITION_NAME=bootimg
-  BLOCK_DEVICE=`cat /proc/dumchar_info | busybox grep $PARTITION_NAME | busybox awk '{print $NF}'`
+  BLOCK_DEVICE=`cat /proc/dumchar_info | ${GREP} $PARTITION_NAME | busybox awk '{print $NF}'`
   unset PARTITION_NAME
 }
 
@@ -222,8 +237,8 @@ pack() {
   cd ${INITRD_UNPACKED}
 
   log "archiving cpio, directory ${INITRD_UNPACKED} = $(pwd)"
-  log "${FIND} . | grep -vE \"^.$\" | ${SORT} -sd | ${CPIO} --create --device-independent --reset-access-time --format="newc" -O \"${INITRD}\""
-  ${FIND} . | grep -vE "^.$" | ${SORT} -sd | ${CPIO} --create --device-independent --reset-access-time --format="newc" -O "${INITRD}"
+  log "${FIND} . | ${GREP} -vE \"^.$\" | ${SORT} -sd | ${CPIO} --create --device-independent --reset-access-time --format="newc" -O \"${INITRD}\""
+  ${FIND} . | ${GREP} -vE "^.$" | ${SORT} -sd | ${CPIO} --create --device-independent --reset-access-time --format="newc" -O "${INITRD}"
 
    size=$(busybox stat -c %s "${INITRD}")
    # size might be less than original, but definitely not less than 1mb
@@ -331,8 +346,8 @@ newBootImg() {
   log "$(${MD5SUM} ${BLOCK_FILE}.img)"
 
   # abootimg also checks if image valid
-  ID_ORIG=$(${ABOOTIMG} -i ${BLOCK_DEVICE} | grep "id =")
-  ID_NEW=$(${ABOOTIMG} -i ${BLOCK_FILE}.img | grep "id =")
+  ID_ORIG=$(${ABOOTIMG} -i ${BLOCK_DEVICE} | ${GREP} "id =")
+  ID_NEW=$(${ABOOTIMG} -i ${BLOCK_FILE}.img | ${GREP} "id =")
 
   if test "${ID_NEW}" != "${ID_ORIG}"; then
     log "android image id mismatch"
@@ -374,6 +389,11 @@ createUPG() {
 
   log "$(${MD5SUM} ${FWUP_FILE_PATH})"
 }
+
+clean() {
+    rm -r "${TEMPDIR}"
+    rm -r "${WORKDIR}"
+}
 ##################################
 
 rm $LOG_FILE
@@ -392,6 +412,7 @@ FWUP_FILE_PATH=/contents/$_UPDATE_FN_.UPG
 log "FWUP_FILE_PATH=$FWUP_FILE_PATH"
 
 preflightTest
+infoCollect
 detectModel
 unpack
 getBlockDevice
@@ -403,11 +424,10 @@ pack
 #newBootImg
 updateBootImg
 createUPG
+clean
 
 nvpflag fup 0x70555766 # run update again with new upg
 nvpflag fur 0x4C504D43 # complete
-
-rm -r ${WORKDIR}
 
 log "done"
 
