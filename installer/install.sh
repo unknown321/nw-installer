@@ -82,12 +82,14 @@ echo "------ FUNCTION ------"
 # detectModel looks for patched fwpchk with modified decryption keys
 detectModel() {
   # walkmanOne?
-  if test -f /opt2/stock/nv_bk; then
+  if test -f /opt2/stock/conf_bk; then
     MODEL=nw-wm1a
     WALKMAN_ONE_FLAG="-w"
-    log "$MODEL, walkmanOne"
+    ${DD} if=/opt2/stock/conf_bk skip=40960 bs=1 count=24 > /tmp/real_model
+    REAL_MODEL=$(cat /tmp/real_model)
+    log "Model: $REAL_MODEL, walkmanOne ($MODEL)"
   else
-    log "$MODEL"
+    log "Model: $MODEL"
   fi
 }
 
