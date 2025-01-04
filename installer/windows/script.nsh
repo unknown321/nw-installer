@@ -54,7 +54,6 @@ Function connectUSB
 		Abort
 	${EndIf}
 
-
 	${NSD_CreateBitmap} 0 20 100% 100% ""
 	Pop $ImageCtrl1
 	${NSD_SetBitmap} $ImageCtrl1 $PLUGINSDIR\device.bmp $BmpHandle1
@@ -123,17 +122,19 @@ FunctionEnd
 
 SectionGroup /e "Currently installed firmware?"
     section /o "WalkmanOne" FWWOne
-        file "../walkmanOne/NW_WM_FW.UPG"
+        File "./walkmanOne/NW_WM_FW.UPG"
     sectionEnd
 
     section "NW-A50 stock firmware" A50Stock
-        file "../nw-a50/NW_WM_FW.UPG"
+        File "./nw-a50/NW_WM_FW.UPG"
     sectionEnd
 
     section "NW-A40 stock firmware" A40Stock
-        file "../nw-a40/NW_WM_FW.UPG"
+        File "./nw-a40/NW_WM_FW.UPG"
     sectionEnd
 SectionGroupEnd
+
+File "../userdata.tar.gz"
 
 section "Run upgrade script"
     sectionIn RO

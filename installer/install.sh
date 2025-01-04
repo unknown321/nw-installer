@@ -48,8 +48,9 @@ UPGTOOL="${TOOLS}/upgtool"
 CPIO="${TOOLS}/cpio"
 CPIOSTRIP="${TOOLS}/cpiostrip"
 MTKHEADER="${TOOLS}/mtkheader"
-USERDATA="${WORKDIR}/userdata.tar"
-USERDATA_DIR="${WORKDIR}/userdata"
+USERDATA="${WORKDIR}/userdata.tar.gz"
+USERDATA_CONTENTS="/contents/userdata.tar.gz"
+USERDATA_DIR="/contents/userdata"
 GZIP="${TOOLS}/gzip"
 ANDROID_HEADER_SKIP=576
 USB_MOUNTED_FILE="/contents/DevIcon.fil"
@@ -222,10 +223,22 @@ extractInitrd() {
 install() {
   log "installing"
   mkdir -p ${USERDATA_DIR}
+  if test -f ${USERDATA_CONTENTS}; then
+    USERDATA=${USERDATA_CONTENTS}
+  fi
+  log "using ${USERDATA_CONTENTS} as data source"
   ${TAR} -C ${USERDATA_DIR} -xf ${USERDATA}
+
   log "executing userscript"
   cd ${USERDATA_DIR}
   log "$(INITRD_UNPACKED=${INITRD_UNPACKED} LOG_FILE=${LOG_FILE} /bin/sh ${USERDATA_DIR}/run.sh)"
+
+  log "removing unpacked userdata"
+  rm -r "${USERDATA_DIR}"
+
+  log "removing userdata ${USERDATA}"
+  rm -r "${USERDATA}"
+
   cd ${WORKDIR}
 }
 

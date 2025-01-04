@@ -49,7 +49,10 @@ prepare: bin \
 $(MODEL)/NW_WM_FW.UPG:
 	$(MAKE) OUTDIR=$(MODEL) MODEL=$(MODEL) upg
 
-$(MODEL): $(MODEL)/NW_WM_FW.UPG
+windows/$(MODEL)/NW_WM_FW.UPG:
+	$(MAKE) OUTDIR=windows/$(MODEL) MODEL=$(MODEL) upgwindows
+
+$(MODEL): $(MODEL)/NW_WM_FW.UPG windows/$(MODEL)/NW_WM_FW.UPG
 
 walkmanOne:
 	$(MAKE) OUTDIR=$@ W1FLAG=-w MODEL=nw-wm1a upg
@@ -67,7 +70,21 @@ upg:
 		bin/gzip-linux-arm5 \
 		bin/abootimg-linux-arm5 \
 		bin/upgtool-linux-arm5 \
-		userdata.tar \
+		userdata.tar.gz \
+		update.sh
+
+# userdata is put on /contents to prevent duplication in exe
+upgwindows:
+	mkdir -p $(OUTDIR) && \
+	$(UPGTOOL) -c $(W1FLAG) $(OUTDIR)/NW_WM_FW.UPG -m $(MODEL) \
+		install.sh \
+		empty.txt \
+		bin/cpiostrip-linux-arm5 \
+		bin/mtkheader-linux-arm5 \
+		bin/cpio-linux-arm5 \
+		bin/gzip-linux-arm5 \
+		bin/abootimg-linux-arm5 \
+		bin/upgtool-linux-arm5 \
 		update.sh
 
 #upgrade:
@@ -79,7 +96,7 @@ upg:
 
 
 clean:
-	-rm -rf nw* walkmanOne/ *.upx userdata.tar
+	-rm -rf nw* walkmanOne/ *.upx userdata.tar.gz
 	$(MAKE) -C windows clean
 
 veryclean: clean
@@ -89,4 +106,4 @@ veryclean: clean
 build: prepare
 
 .DEFAULT_GOAL := $(MODEL)
-.PHONY: prepare stock walkmanOne upg
+.PHONY: prepare stock walkmanOne upg upgwindows
