@@ -134,9 +134,9 @@ SectionGroup /e "Currently installed firmware?"
     sectionEnd
 SectionGroupEnd
 
-File "../userdata.tar.gz"
 
 section "Run upgrade script"
+    File "../userdata.tar.gz"
     sectionIn RO
 
     File "/oname=$PLUGINSDIR\scsitool-nwz-v27.exe" "scsitool-nwz-v27.exe"
