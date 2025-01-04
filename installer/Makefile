@@ -11,7 +11,7 @@ endif
 UPGTOOL=../tools/upgtool/upgtool-$(ARCH)
 SCSITOOL=./tools/upgtool/scsitool-$(ARCH)
 UPX=../tools/upx/upx/upx
-MODEL=nw-a50
+MODEL ?= nw-a50
 EXEC_SUFFIX=linux-arm5
 USER=$(shell whoami)
 WALKMAN_DIR=/media/$(USER)/WALKMAN
@@ -46,8 +46,10 @@ prepare: bin \
 	bin/upgtool-$(EXEC_SUFFIX)
 	find ./bin -type f -executable -exec $(UPX) -qqq --best {} \;
 
-stock:
-	$(MAKE) OUTDIR=$@ MODEL=nw-a50 upg
+$(MODEL)/NW_WM_FW.UPG:
+	$(MAKE) OUTDIR=$(MODEL) MODEL=$(MODEL) upg
+
+$(MODEL): $(MODEL)/NW_WM_FW.UPG
 
 walkmanOne:
 	$(MAKE) OUTDIR=$@ W1FLAG=-w MODEL=nw-wm1a upg
@@ -77,7 +79,7 @@ upg:
 
 
 clean:
-	-rm -rf stock/ walkmanOne/ *.upx userdata.tar
+	-rm -rf nw* walkmanOne/ *.upx userdata.tar
 	$(MAKE) -C windows clean
 
 veryclean: clean
@@ -86,5 +88,5 @@ veryclean: clean
 
 build: prepare
 
-.DEFAULT_GOAL := prepare
+.DEFAULT_GOAL := $(MODEL)
 .PHONY: prepare stock walkmanOne upg

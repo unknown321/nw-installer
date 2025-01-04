@@ -126,8 +126,12 @@ SectionGroup /e "Currently installed firmware?"
         file "../walkmanOne/NW_WM_FW.UPG"
     sectionEnd
 
-    section "Stock firmware" FWStock
-        file "../stock/NW_WM_FW.UPG"
+    section "NW-A50 stock firmware" A50Stock
+        file "../nw-a50/NW_WM_FW.UPG"
+    sectionEnd
+
+    section "NW-A40 stock firmware" A40Stock
+        file "../nw-a40/NW_WM_FW.UPG"
     sectionEnd
 SectionGroupEnd
 
@@ -142,7 +146,8 @@ var selectGroup
 
 Function .onSelChange
 !insertmacro StartRadioButtons $selectGroup
-    !insertmacro RadioButton ${FWStock}
+    !insertmacro RadioButton ${A40Stock}
+    !insertmacro RadioButton ${A50Stock}
     !insertmacro RadioButton ${FWWOne}
 !insertmacro EndRadioButtons
 FunctionEnd
@@ -163,7 +168,8 @@ Function .onInit
     File /oname=$PLUGINSDIR\device.bmp "device.bmp"
     File /oname=$PLUGINSDIR\explorer.bmp "explorer.bmp"
 
-    SectionSetFlags ${FWStock} 1
+    SectionSetFlags ${A50Stock} 1
+    SectionSetFlags ${A40Stock} 0
     SectionSetFlags ${FWWOne} 0
-    StrCpy $selectGroup ${FWStock}
+    StrCpy $selectGroup ${A50Stock}
 FunctionEnd

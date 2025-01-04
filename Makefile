@@ -27,7 +27,8 @@ LICENSE_3rdparty.txt:
 prepare: prepare_deps LICENSE_3rdparty.txt
 
 build: prepare
-	$(MAKE) -C installer stock
+	$(MAKE) -C installer MODEL=nw-a50
+	$(MAKE) -C installer MODEL=nw-a40
 	$(MAKE) -C installer walkmanOne
 	$(DOCKER) $(MAKE) -C installer/windows OUTFILE=$(OUTFILE) APPNAME=$(APPNAME)
 
