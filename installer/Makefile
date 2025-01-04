@@ -56,6 +56,7 @@ $(MODEL): $(MODEL)/NW_WM_FW.UPG windows/$(MODEL)/NW_WM_FW.UPG
 
 walkmanOne:
 	$(MAKE) OUTDIR=$@ W1FLAG=-w MODEL=nw-wm1a upg
+	$(MAKE) OUTDIR=windows/$@ W1FLAG=-w MODEL=nw-wm1a upg
 
 # file order is important
 # see install.sh:unpack()
@@ -96,7 +97,12 @@ upgwindows:
 
 
 clean:
-	-rm -rf nw* walkmanOne/ *.upx userdata.tar.gz
+	-rm -rf walkmanOne/ \
+		nw* \
+		windows/walkmanOne/ \
+		windows/nw* \
+		*.upx \
+		userdata.tar.gz
 	$(MAKE) -C windows clean
 
 veryclean: clean
