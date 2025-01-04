@@ -55,7 +55,6 @@ ANDROID_HEADER_SKIP=576
 USB_MOUNTED_FILE="/contents/DevIcon.fil"
 MODEL="nw-a50"
 WALKMAN_ONE_FLAG=
-#MODEL="nw-wm1a"
 
 mount -o remount,rw,noatime /opt2
 
@@ -89,6 +88,18 @@ detectModel() {
     REAL_MODEL=$(cat /tmp/real_model)
     log "Model: $REAL_MODEL, walkmanOne ($MODEL)"
   else
+    MODEL_ID=$(nvpflag -x mid)
+    case "${MODEL_ID}" in
+      "0x24000004")
+        MODEL=nw-a40
+        ;;
+      "0x25000004")
+        MODEL=nw-a50
+        ;;
+      "0x21000008")
+        MODEL=nw-wm1z
+        ;;
+    esac
     log "Model: $MODEL"
   fi
 }
