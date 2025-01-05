@@ -23,11 +23,6 @@ FWUP_BG_IMG_NVP=fwup_bg.dat
 LOG_FILE=/contents/upgrade.log
 CONSOLE=/dev/console
 
-#IMPORT_RC="import init.nw-scrob.rc"
-
-# taken from original firmware
-#state='{"xflash": false, "hwcode": 34192, "flashtype": "emmc", "flashsize": 15634268160, "m_emmc_ua_size": 15634268160, "m_emmc_boot1_size": 4194304, "m_emmc_boot2_size": 4194304, "m_emmc_gp_size": [0, 0, 0, 0], "m_nand_flash_size": 0, "m_sdmmc_ua_size": 0, "m_nor_flash_size": 0}'
-
 # why opt2?
 # cpio --create breaks symlinks on rootfs
 WORKDIR=/opt2/workdir
@@ -252,14 +247,6 @@ pack() {
   mkdir ${INITRD_UNPACKED}/logs
   chmod 0755 ${INITRD_UNPACKED}/logs
   chown 1000:1000 ${INITRD_UNPACKED}/logs
-
-#  echo -n "${state}" > ${INITRD_UNPACKED}/install_update_script/.state
-#  chown 1000:1000 ${INITRD_UNPACKED}/install_update_script/.state
-#  chmod 0644 ${INITRD_UNPACKED}/install_update_script/.state
-
-#  echo -n "${state}" > ${INITRD_UNPACKED}/.state
-#  chown 1000:1000 ${INITRD_UNPACKED}/.state
-#  chmod 0644 ${INITRD_UNPACKED}/.state
 
   cd ${INITRD_UNPACKED}
 
