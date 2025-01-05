@@ -4,13 +4,15 @@ SCSITOOL_URL=https://www.rockbox.org/realwiki/pub/Main/SonyNWDestTool/$(SCSITOOL
 APPNAME ?= test
 OUTFILE ?= install.exe
 ECHO=/bin/echo
+A30 ?= 1
+A40 ?= 1
 
 $(SCSITOOL):
 	wget $(SCSITOOL_URL)
 	$(ECHO) "$(SCSITOOL_SHA256) $(SCSITOOL)" | sha256sum --check --status
 
 $(OUTFILE): LICENSE.txt
-	makensis -DAPPNAME=$(APPNAME) -DOUTFILE=$(OUTFILE) script.nsh
+	makensis -DAPPNAME=$(APPNAME) -DOUTFILE=$(OUTFILE) -DA40=$(A40) -DA30=$(A30) script.nsh
 
 clean:
 	-rm -f $(OUTFILE) LICENSE.txt

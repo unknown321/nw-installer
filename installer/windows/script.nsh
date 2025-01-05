@@ -17,6 +17,8 @@ Page instfiles
 
 Var USBLetter
 Var USBLabel
+Var A40text
+Var A30text
 
 !define GetUSB "!insertmacro _GetUSB"
 !define GetUSBLabel "!insertmacro _GetUSBLabel"
@@ -129,8 +131,11 @@ SectionGroup /e "Currently installed firmware?"
         File "./nw-a50/NW_WM_FW.UPG"
     sectionEnd
 
-    section "NW-A40 stock firmware" A40Stock
+    section $A40text A40Stock
         File "./nw-a40/NW_WM_FW.UPG"
+    sectionEnd
+    section $A30text A30Stock
+        File "./nw-a30/NW_WM_FW.UPG"
     sectionEnd
 SectionGroupEnd
 
@@ -147,8 +152,13 @@ var selectGroup
 
 Function .onSelChange
 !insertmacro StartRadioButtons $selectGroup
-    !insertmacro RadioButton ${A40Stock}
     !insertmacro RadioButton ${A50Stock}
+    ${If} ${A40} != 0
+    !insertmacro RadioButton ${A40Stock}
+    ${EndIf}
+    ${If} ${A30} != 0
+    !insertmacro RadioButton ${A30Stock}
+    ${EndIf}
     !insertmacro RadioButton ${FWWOne}
 !insertmacro EndRadioButtons
 FunctionEnd
@@ -171,6 +181,16 @@ Function .onInit
 
     SectionSetFlags ${A50Stock} 1
     SectionSetFlags ${A40Stock} 0
+    SectionSetFlags ${A30Stock} 0
     SectionSetFlags ${FWWOne} 0
     StrCpy $selectGroup ${A50Stock}
+
+    StrCpy $A40text ""
+    StrCpy $A30text ""
+    ${If} ${A40} != 0
+    StrCpy $A40text "NW-A40 stock firmware"
+    ${EndIf}
+    ${If} ${A30} != 0
+    StrCpy $A30text "NW-A30 stock firmware"
+    ${EndIf}
 FunctionEnd

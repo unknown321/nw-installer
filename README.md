@@ -54,11 +54,15 @@ You can provide following arguments to `make`:
 
   - `OUTFILE`: sets Windows installer name
   - `APPNAME`: sets application name in installer
+  - `A40`: NW-A40 support (default: on)
+  - `A30`: NW-A30 support (default: on)
 
 ### Example:
 
+A40 disabled, installer will contain Walkman One, A50 and A30:
+
 ```shell
-$ make OUTFILE=mybinary.exe APPNAME=uniqueApplication
+$ make OUTFILE=mybinary.exe APPNAME=uniqueApplication A40=0
 ...
 Processed 1 file, writing output (x86-unicode):
 
