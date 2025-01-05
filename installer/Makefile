@@ -56,7 +56,7 @@ $(MODEL): $(MODEL)/NW_WM_FW.UPG windows/$(MODEL)/NW_WM_FW.UPG
 
 walkmanOne:
 	$(MAKE) OUTDIR=$@ W1FLAG=-w MODEL=nw-wm1a upg
-	$(MAKE) OUTDIR=windows/$@ W1FLAG=-w MODEL=nw-wm1a upg
+	$(MAKE) OUTDIR=windows/$@ W1FLAG=-w MODEL=nw-wm1a upgwindows
 
 # file order is important
 # see install.sh:unpack()
