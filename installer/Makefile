@@ -15,6 +15,7 @@ MODEL ?= nw-a50
 EXEC_SUFFIX=linux-arm5
 USER=$(shell whoami)
 WALKMAN_DIR=/media/$(USER)/WALKMAN
+USERDATA_FILENAME ?= userdata.tar.gz
 
 bin:
 	mkdir -p bin
@@ -72,7 +73,7 @@ upg:
 		bin/abootimg-linux-arm5 \
 		bin/upgtool-linux-arm5 \
 		update.sh \
-		userdata.tar.gz
+		$(USERDATA_FILENAME)
 
 # userdata is put on /contents to prevent duplication in exe
 upgwindows:
@@ -102,7 +103,8 @@ clean:
 		windows/walkmanOne/ \
 		windows/nw* \
 		*.upx \
-		userdata.tar.gz
+		userdata.tar.gz \
+		userdata.uninstaller.tar.gz
 	$(MAKE) -C windows clean
 
 veryclean: clean

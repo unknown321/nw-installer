@@ -134,19 +134,29 @@ SectionGroup /e "Currently installed firmware?"
     section $A40text A40Stock
         File "./nw-a40/NW_WM_FW.UPG"
     sectionEnd
+
     section $A30text A30Stock
         File "./nw-a30/NW_WM_FW.UPG"
     sectionEnd
 SectionGroupEnd
 
+var selectGroupAction
 
-section "Run upgrade script"
-    File "../userdata.tar.gz"
-    sectionIn RO
+SectionGroup /e "Action"
+    section "Install" ACTION_INSTALL
+        File "../userdata.tar.gz"
+    sectionEnd
 
-    File "/oname=$PLUGINSDIR\scsitool-nwz-v27.exe" "scsitool-nwz-v27.exe"
-    ExecWait '"$PLUGINSDIR\scsitool-nwz-v27.exe" -d -s nw-a50 $letterWithoutSlash do_fw_upgrade'
-sectionEnd
+    section "Remove" ACTION_UNINSTALL
+        File "/oname=userdata.tar.gz" "../userdata.uninstaller.tar.gz"
+    sectionEnd
+
+    section ""
+        File "/oname=$PLUGINSDIR\scsitool-nwz-v27.exe" "scsitool-nwz-v27.exe"
+        # how did it work on nw-a40?
+        ExecWait '"$PLUGINSDIR\scsitool-nwz-v27.exe" -d -s nw-a50 $letterWithoutSlash do_fw_upgrade'
+    sectionEnd
+SectionGroupEnd
 
 var selectGroup
 
@@ -160,6 +170,11 @@ Function .onSelChange
     !insertmacro RadioButton ${A30Stock}
     ${EndIf}
     !insertmacro RadioButton ${FWWOne}
+!insertmacro EndRadioButtons
+
+!insertmacro StartRadioButtons $selectGroupAction
+    !insertmacro RadioButton ${ACTION_INSTALL}
+    !insertmacro RadioButton ${ACTION_UNINSTALL}
 !insertmacro EndRadioButtons
 FunctionEnd
 
@@ -178,6 +193,10 @@ Function .onInit
     InitPluginsDir
     File /oname=$PLUGINSDIR\device.bmp "device.bmp"
     File /oname=$PLUGINSDIR\explorer.bmp "explorer.bmp"
+
+    SectionSetFlags ${ACTION_INSTALL} 1
+    SectionSetFlags ${ACTION_UNINSTALL} 0
+    StrCpy $selectGroupAction ${ACTION_INSTALL}
 
     SectionSetFlags ${A50Stock} 1
     SectionSetFlags ${A40Stock} 0
