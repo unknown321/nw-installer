@@ -3,4 +3,5 @@
 *.exe
 bin/
 userdata.tar
+userdata.tar.gz
 LICENSE.txt*

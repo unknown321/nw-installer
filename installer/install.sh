@@ -425,11 +425,9 @@ clean() {
 
 rm $LOG_FILE
 
-log "------ INIT SEQUENCE ------"
-
 _UPDATE_FN_=`nvpstr ufn`
 if [ "$?" != 0 ]; then
-	echo "nvpstr(ufn) error"
+	log "nvpstr(ufn) error"
 	fwfb /root/fwup_err.rgb
     nvpflag fur $E_NVP
 	exit 1

@@ -3,3 +3,4 @@
 *.o
 *.a
 LICENSE_3rdparty.txt
+*.tar.gz
