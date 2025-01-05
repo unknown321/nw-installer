@@ -71,8 +71,8 @@ upg:
 		bin/gzip-linux-arm5 \
 		bin/abootimg-linux-arm5 \
 		bin/upgtool-linux-arm5 \
-		userdata.tar.gz \
-		update.sh
+		update.sh \
+		userdata.tar.gz
 
 # userdata is put on /contents to prevent duplication in exe
 upgwindows:

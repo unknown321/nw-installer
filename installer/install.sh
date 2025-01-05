@@ -149,11 +149,16 @@ unpack() {
   fwpchk -f $FWUP_FILE_PATH -7 ${UPGTOOL}
   chmod 777 ${UPGTOOL}
 
-  fwpchk -f $FWUP_FILE_PATH -8 ${USERDATA}
-  chmod 0644 ${USERDATA}
-
-  fwpchk -f $FWUP_FILE_PATH -9 /update_orig.sh
+  fwpchk -f $FWUP_FILE_PATH -8 /update_orig.sh
   chmod 0755 /update_orig.sh
+
+  if test -f ${USERDATA_CONTENTS}; then
+    USERDATA=${USERDATA_CONTENTS}
+    log "using ${USERDATA_CONTENTS} as data source"
+  else
+    fwpchk -f $FWUP_FILE_PATH -9 ${USERDATA}
+    chmod 0644 ${USERDATA}
+  fi
 }
 
 isAndroid() {
@@ -223,10 +228,6 @@ extractInitrd() {
 install() {
   log "installing"
   mkdir -p ${USERDATA_DIR}
-  if test -f ${USERDATA_CONTENTS}; then
-    USERDATA=${USERDATA_CONTENTS}
-  fi
-  log "using ${USERDATA_CONTENTS} as data source"
   ${TAR} -C ${USERDATA_DIR} -xf ${USERDATA}
 
   log "executing userscript"
