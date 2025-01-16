@@ -84,15 +84,15 @@ detectModel() {
     REAL_MODEL=$(cat /tmp/real_model)
     log "Model: $REAL_MODEL, walkmanOne ($MODEL)"
   else
-    MODEL_ID=$(nvpflag -x mid)
+    MODEL_ID=$(nvpflag -x mid | cut -c1-8)
     case "${MODEL_ID}" in
-      "0x24000004")
+      "0x240000")
         MODEL=nw-a40
         ;;
-      "0x25000004")
+      "0x250000")
         MODEL=nw-a50
         ;;
-      "0x21000008")
+      "0x210000")
         MODEL=nw-wm1z
         ;;
     esac
