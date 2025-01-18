@@ -12,6 +12,7 @@ UPGTOOL=../tools/upgtool/upgtool-$(ARCH)
 SCSITOOL=./tools/upgtool/scsitool-$(ARCH)
 UPX=../tools/upx/upx/upx
 MODEL ?= nw-a50
+A40MOD_ONLY ?= 0
 EXEC_SUFFIX=linux-arm5
 USER=$(shell whoami)
 WALKMAN_DIR=/media/$(USER)/WALKMAN
@@ -51,7 +52,7 @@ $(MODEL)/NW_WM_FW.UPG:
 	$(MAKE) OUTDIR=$(MODEL) MODEL=$(MODEL) upg
 
 windows/$(MODEL)/NW_WM_FW.UPG:
-	$(MAKE) OUTDIR=windows/$(MODEL) MODEL=$(MODEL) upgwindows
+	$(MAKE) OUTDIR=windows/$(MODEL) MODEL=$(MODEL) A40MOD_ONLY=$(A40MOD_ONLY) upgwindows
 
 $(MODEL): $(MODEL)/NW_WM_FW.UPG windows/$(MODEL)/NW_WM_FW.UPG
 

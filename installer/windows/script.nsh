@@ -206,9 +206,15 @@ Function .onInit
 
     StrCpy $A40text ""
     StrCpy $A30text ""
+
     ${If} ${A40} != 0
-    StrCpy $A40text "NW-A40 stock firmware"
+        ${If} ${A40MOD_ONLY} == 1
+            StrCpy $A40text "NW-A40 with A50 mod"
+        ${Else}
+            StrCpy $A40text "NW-A40 stock firmware (or A50 mod)"
+        ${EndIf}
     ${EndIf}
+
     ${If} ${A30} != 0
     StrCpy $A30text "NW-A30 stock firmware"
     ${EndIf}

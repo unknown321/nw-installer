@@ -6,13 +6,14 @@ OUTFILE ?= install.exe
 ECHO=/bin/echo
 A30 ?= 1
 A40 ?= 1
+A40MOD_ONLY ?= 0
 
 $(SCSITOOL):
 	wget $(SCSITOOL_URL)
 	$(ECHO) "$(SCSITOOL_SHA256) $(SCSITOOL)" | sha256sum --check --status
 
 $(OUTFILE): LICENSE.txt
-	makensis -DAPPNAME=$(APPNAME) -DOUTFILE=$(OUTFILE) -DA40=$(A40) -DA30=$(A30) script.nsh
+	makensis -DAPPNAME=$(APPNAME) -DOUTFILE=$(OUTFILE) -DA40=$(A40) -DA30=$(A30) -DA40MOD_ONLY=$(A40MOD_ONLY) script.nsh
 
 clean:
 	-rm -f $(OUTFILE) LICENSE.txt

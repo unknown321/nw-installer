@@ -63,6 +63,9 @@ You can provide following arguments to `make`:
 - `APPNAME`: sets application name in installer
 - `A40`: NW-A40 Windows support (default: on)
 - `A30`: NW-A30 Windows support (default: on)
+- `A40MOD_ONLY`: Windows installer indicates that NW-A40 firmware should be used only with [A50 mod][1] (default: off)
+
+[1]: https://www.mrwalkman.com/p/nw-a40-stock-update.html
 
 ### Example:
 
@@ -84,10 +87,11 @@ installer/
      └── NW_WM_FW.UPG
 ```
 
-Produces Walkman One, A50/40/30 `UPG` files and Windows installer (A40 is disabled):
+Produces Walkman One, A50/40/30 `UPG` files and Windows installer (A30 is disabled). Windows installer indicates that
+only A40 mod is supported:
 
 ```shell
-$ make build win OUTFILE=mybinary.exe APPNAME=uniqueApplication A40=0
+$ make build win OUTFILE=mybinary.exe APPNAME=uniqueApplication A30=0 A40MOD_ONLY=1
 ...
 Processed 1 file, writing output (x86-unicode):
 

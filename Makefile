@@ -3,6 +3,7 @@ IMAGE=nw-crosstool
 DOCKER=docker run -t --rm -v `pwd`:`pwd` -w `pwd` $(IMAGE)
 A40 ?= 1
 A30 ?= 1
+A40MOD_ONLY ?= 0
 USERDATA_FILENAME ?= userdata.tar.gz
 
 veryclean: clean
@@ -31,11 +32,11 @@ prepare: prepare_deps LICENSE_3rdparty.txt
 
 build: prepare
 	$(MAKE) -C installer MODEL=nw-a50 USERDATA_FILENAME=$(USERDATA_FILENAME)
-	$(MAKE) -C installer MODEL=nw-a40 USERDATA_FILENAME=$(USERDATA_FILENAME)
+	$(MAKE) -C installer MODEL=nw-a40 A40MOD_ONLY=$(A40MOD_ONLY) USERDATA_FILENAME=$(USERDATA_FILENAME)
 	$(MAKE) -C installer MODEL=nw-a30 USERDATA_FILENAME=$(USERDATA_FILENAME)
 	$(MAKE) -C installer walkmanOne USERDATA_FILENAME=$(USERDATA_FILENAME)
 
 win:
-	$(DOCKER) $(MAKE) -C installer/windows OUTFILE=$(OUTFILE) APPNAME=$(APPNAME) A40=$(A40) A30=$(A30) USERDATA_FILENAME=$(USERDATA_FILENAME)
+	$(DOCKER) $(MAKE) -C installer/windows OUTFILE=$(OUTFILE) APPNAME=$(APPNAME) A40=$(A40) A30=$(A30) A40MOD_ONLY=$(A40MOD_ONLY) USERDATA_FILENAME=$(USERDATA_FILENAME)
 
 .DEFAULT_GOAL := build
