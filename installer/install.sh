@@ -33,6 +33,11 @@ GUNZIP="/xbin/busybox gunzip"
 FIND="/xbin/busybox find"
 SORT="/xbin/busybox sort"
 GREP="/xbin/busybox grep"
+MKDIR="/xbin/busybox mkdir"
+CP="/xbin/busybox cp"
+RM="/xbin/busybox rm"
+CHMOD="/xbin/busybox chmod"
+CHOWN="/xbin/busybox chown"
 MD5SUM="/xbin/busybox md5sum"
 TAR="/xbin/busybox tar"
 INITRD_UNPACKED="${WORKDIR}/unpacked"
@@ -54,9 +59,9 @@ WALKMAN_ONE_FLAG=
 
 mount -o remount,rw,noatime /opt2
 
-rm -r ${WORKDIR}
-mkdir -p "${WORKDIR}"
-mkdir -p "${TOOLS}"
+${RM} -r ${WORKDIR}
+${MKDIR} -p "${WORKDIR}"
+${MKDIR} -p "${TOOLS}"
 
 log()
 {
@@ -127,32 +132,32 @@ preflightTest() {
 
 unpack() {
   fwpchk -f $FWUP_FILE_PATH -2 ${CPIOSTRIP}
-  chmod 777 ${CPIOSTRIP}
+  ${CHMOD} 777 ${CPIOSTRIP}
 
   fwpchk -f $FWUP_FILE_PATH -3 ${MTKHEADER}
-  chmod 777 ${MTKHEADER}
+  ${CHMOD} 777 ${MTKHEADER}
 
   fwpchk -f $FWUP_FILE_PATH -4 ${CPIO}
-  chmod 777 ${CPIO}
+  ${CHMOD} 777 ${CPIO}
 
   fwpchk -f $FWUP_FILE_PATH -5 ${GZIP}
-  chmod 777 ${GZIP}
+  ${CHMOD} 777 ${GZIP}
 
   fwpchk -f $FWUP_FILE_PATH -6 ${ABOOTIMG}
-  chmod 777 ${ABOOTIMG}
+  ${CHMOD} 777 ${ABOOTIMG}
 
   fwpchk -f $FWUP_FILE_PATH -7 ${UPGTOOL}
-  chmod 777 ${UPGTOOL}
+  ${CHMOD} 777 ${UPGTOOL}
 
   fwpchk -f $FWUP_FILE_PATH -8 /update_orig.sh
-  chmod 0755 /update_orig.sh
+  ${CHMOD} 0755 /update_orig.sh
 
   if test -f ${USERDATA_CONTENTS}; then
     USERDATA=${USERDATA_CONTENTS}
     log "using ${USERDATA_CONTENTS} as data source"
   else
     fwpchk -f $FWUP_FILE_PATH -9 ${USERDATA}
-    chmod 0644 ${USERDATA}
+    ${CHMOD} 0644 ${USERDATA}
   fi
 }
 
@@ -175,8 +180,8 @@ dumpBlockDevice() {
   ${DD} if=${BLOCK_DEVICE} of="${BLOCK_FILE}"
 
   P="${TEMPDIR}/0.dump/"
-  mkdir -p $P
-  cp ${BLOCK_FILE} $P
+  ${MKDIR} -p $P
+  ${CP} ${BLOCK_FILE} $P
   log "$(${MD5SUM} ${BLOCK_FILE} 2>&1)"
 }
 
@@ -199,12 +204,13 @@ extractInitrd() {
   ${GUNZIP} ${INITRD}.gz
   log "$(${MD5SUM} ${INITRD})"
 
-  mkdir -p "${INITRD_UNPACKED}"
+  ${MKDIR} -p "${INITRD_UNPACKED}"
 
   P="${TEMPDIR}/1.extractInitrd/"
-  mkdir -p $P
-  cp ${INITRD} $P
-  cp ${INITRD}_header $P
+  ${MKDIR} -p $P
+
+  ${CP} ${INITRD} $P
+  ${CP} ${INITRD}_header $P
 
   log "unarchiving initrd cpio"
 
@@ -217,12 +223,12 @@ extractInitrd() {
     exit 0
   fi
 
-  rm ${INITRD} ${INITRD}.gz ${INITRD}.img
+  ${RM} ${INITRD} ${INITRD}.gz ${INITRD}.img
 }
 
 install() {
   log "installing"
-  mkdir -p ${USERDATA_DIR}
+  ${MKDIR} -p ${USERDATA_DIR}
   ${TAR} -C ${USERDATA_DIR} -xf ${USERDATA}
 
   log "executing userscript"
@@ -230,23 +236,23 @@ install() {
   log "$(INITRD_UNPACKED=${INITRD_UNPACKED} LOG_FILE=${LOG_FILE} /bin/sh ${USERDATA_DIR}/run.sh)"
 
   log "removing unpacked userdata"
-  rm -r "${USERDATA_DIR}"
+  ${RM} -r "${USERDATA_DIR}"
 
   log "removing userdata ${USERDATA}"
-  rm -r "${USERDATA}"
+  ${RM} -r "${USERDATA}"
 
   cd ${WORKDIR}
 }
 
 pack() {
-  rm ${INITRD_UNPACKED}/lib/1 # ???
-  mkdir ${INITRD_UNPACKED}/install_update_script/logs
-  chmod 0755 ${INITRD_UNPACKED}/install_update_script/logs
-  chown 1000:1000 ${INITRD_UNPACKED}/install_update_script/logs
+  ${RM} ${INITRD_UNPACKED}/lib/1 # ???
+  ${MKDIR} ${INITRD_UNPACKED}/install_update_script/logs
+  ${CHMOD} 0755 ${INITRD_UNPACKED}/install_update_script/logs
+  ${CHOWN} 1000:1000 ${INITRD_UNPACKED}/install_update_script/logs
 
-  mkdir ${INITRD_UNPACKED}/logs
-  chmod 0755 ${INITRD_UNPACKED}/logs
-  chown 1000:1000 ${INITRD_UNPACKED}/logs
+  ${MKDIR} ${INITRD_UNPACKED}/logs
+  ${CHMOD} 0755 ${INITRD_UNPACKED}/logs
+  ${CHOWN} 1000:1000 ${INITRD_UNPACKED}/logs
 
   cd ${INITRD_UNPACKED}
 
@@ -277,15 +283,15 @@ pack() {
   cd ${WORKDIR}
 
   P="${TEMPDIR}/2.pack/"
-  mkdir -p $P
-  cp ${INITRD} $P
+  ${MKDIR} -p $P
+  ${CP} ${INITRD} $P
 
   log "gzipping patched initrd"
   ${GZIP} -9 -f "${INITRD}"
 
   log "$(${MD5SUM} ${INITRD}.gz)"
 
-  cp ${INITRD}.gz $P
+  ${CP} ${INITRD}.gz $P
 
   if test ! -s "${INITRD}.gz"; then
     log "gzipping failed"
@@ -309,7 +315,7 @@ pack() {
 
   log "$(${MD5SUM} ${INITRD}.img)"
 
-  cp ${INITRD}.img $P
+  ${CP} ${INITRD}.img $P
 }
 
 updateBootImg() {
@@ -328,11 +334,11 @@ updateBootImg() {
   log "$(${ABOOTIMG} -i ${BLOCK_FILE})"
 
   P="${TEMPDIR}/3.updateBootImg/"
-  busybox mkdir -p $P
-  busybox cp ${BLOCK_FILE} $P
+  ${MKDIR} -p $P
+  ${CP} ${BLOCK_FILE} $P
 
-  log "busybox cp -v ${BLOCK_FILE} ${BLOCK_FILE}.img"
-  log "$(busybox cp -v ${BLOCK_FILE} ${BLOCK_FILE}.img 2>&1)"
+  log "${CP} -v ${BLOCK_FILE} ${BLOCK_FILE}.img"
+  log "$(${CP} -v ${BLOCK_FILE} ${BLOCK_FILE}.img 2>&1)"
 }
 
 updateBlockDevice() {
@@ -348,7 +354,7 @@ updateBlockDevice() {
 
 
 createUPG() {
-  rm $FWUP_FILE_PATH
+  ${RM} $FWUP_FILE_PATH
 
   cd ${WORKDIR}
 
@@ -379,12 +385,13 @@ createUPG() {
 }
 
 clean() {
-    rm -r "${TEMPDIR}"
-    rm -r "${WORKDIR}"
+    ${RM} -r "${TEMPDIR}"
+    ${RM} -r "${WORKDIR}"
 }
+
 ##################################
 
-rm $LOG_FILE
+${RM} $LOG_FILE
 
 _UPDATE_FN_=`nvpstr ufn`
 if [ "$?" != 0 ]; then
