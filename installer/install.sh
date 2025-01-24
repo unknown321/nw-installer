@@ -328,10 +328,11 @@ updateBootImg() {
   log "$(${ABOOTIMG} -i ${BLOCK_FILE})"
 
   P="${TEMPDIR}/3.updateBootImg/"
-  mkdir -p $P
-  cp ${BLOCK_FILE} $P
+  busybox mkdir -p $P
+  busybox cp ${BLOCK_FILE} $P
 
-  cp ${BLOCK_FILE} ${BLOCK_FILE}.img
+  log "busybox cp -v ${BLOCK_FILE} ${BLOCK_FILE}.img"
+  log "$(busybox cp -v ${BLOCK_FILE} ${BLOCK_FILE}.img 2>&1)"
 }
 
 updateBlockDevice() {
@@ -345,33 +346,6 @@ updateBlockDevice() {
     fi
 }
 
-newBootImg() {
-  log "creating new bootimg file with patched initrd"
-
-  cd "${WORKDIR}"
-
-  ${ABOOTIMG} --create ${BLOCK_FILE}.img -f bootimg.cfg -k zImage -r initrd.img
-
-  log "$(${MD5SUM} ${BLOCK_FILE}.img)"
-
-  # patch image id
-  ${DD} if=${BLOCK_FILE} of=${BLOCK_FILE}.img skip=${ANDROID_HEADER_SKIP} seek=${ANDROID_HEADER_SKIP} ibs=1 obs=1 count=32 conv=notrunc
-
-  log "$(${MD5SUM} ${BLOCK_FILE}.img)"
-
-  # abootimg also checks if image valid
-  ID_ORIG=$(${ABOOTIMG} -i ${BLOCK_DEVICE} | ${GREP} "id =")
-  ID_NEW=$(${ABOOTIMG} -i ${BLOCK_FILE}.img | ${GREP} "id =")
-
-  if test "${ID_NEW}" != "${ID_ORIG}"; then
-    log "android image id mismatch"
-    log "new image id: ${ID_NEW}"
-    log "orig image id: ${ID_ORIG}"
-    exit 0
-  fi
-
-  log "$(${ABOOTIMG} -i ${BLOCK_FILE})"
-}
 
 createUPG() {
   rm $FWUP_FILE_PATH
@@ -380,7 +354,7 @@ createUPG() {
 
   echo -n > empty.txt
   log "${UPGTOOL} -m ${MODEL} ${WALKMAN_ONE_FLAG} --create $FWUP_FILE_PATH -z 2,boot.img /update_orig.sh empty.txt ${BLOCK_FILE}.img"
-  ${UPGTOOL} -m ${MODEL} ${WALKMAN_ONE_FLAG} --create $FWUP_FILE_PATH -z 2,boot.img /update_orig.sh empty.txt ${BLOCK_FILE}.img
+  log "$(${UPGTOOL} -m ${MODEL} ${WALKMAN_ONE_FLAG} --create $FWUP_FILE_PATH -z 2,boot.img /update_orig.sh empty.txt ${BLOCK_FILE}.img 2>&1)"
 
   if test $? -ne 0; then
     log "creating upg failed"
