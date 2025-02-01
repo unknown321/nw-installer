@@ -138,6 +138,10 @@ SectionGroup /e "Currently installed firmware?"
     section $A30text A30Stock
         File "./nw-a30/NW_WM_FW.UPG"
     sectionEnd
+
+    section "NW-A50 with A50Z mod" A50Z
+        File "./a50z/NW_WM_FW.UPG"
+    sectionEnd
 SectionGroupEnd
 
 var selectGroupAction
@@ -153,7 +157,7 @@ SectionGroup /e "Action"
 
     section ""
         File "/oname=$PLUGINSDIR\scsitool-nwz-v27.exe" "scsitool-nwz-v27.exe"
-        # how did it work on nw-a40?
+        # how did it work on nw-a40 and nw-zx300?
         ExecWait '"$PLUGINSDIR\scsitool-nwz-v27.exe" -d -s nw-a50 $letterWithoutSlash do_fw_upgrade'
     sectionEnd
 SectionGroupEnd
@@ -170,6 +174,7 @@ Function .onSelChange
     !insertmacro RadioButton ${A30Stock}
     ${EndIf}
     !insertmacro RadioButton ${FWWOne}
+    !insertmacro RadioButton ${A50Z}
 !insertmacro EndRadioButtons
 
 !insertmacro StartRadioButtons $selectGroupAction
@@ -202,6 +207,7 @@ Function .onInit
     SectionSetFlags ${A40Stock} 0
     SectionSetFlags ${A30Stock} 0
     SectionSetFlags ${FWWOne} 0
+    SectionSetFlags ${A50Z} 0
     StrCpy $selectGroup ${A50Stock}
 
     StrCpy $A40text ""

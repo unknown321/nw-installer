@@ -48,6 +48,7 @@ static char *g_key = NULL;
 static char *g_sig = NULL;
 static int g_nr_threads = 1;
 bool g_walkmanone = false;
+bool g_a50z = false;
 #define MAX_NR_FILES    32
 bool g_compress[MAX_NR_FILES] = {false};
 const char *g_md5name[MAX_NR_FILES] = {NULL};
@@ -88,7 +89,7 @@ static int get_key_and_sig(bool is_extract, void *buf)
             cprintf(GREY, "The KAS has wrong length (must be 32 or 64 hex digits)\n");
             return 4;
         }
-        decrypt_keysig(g_kas, &g_key, &g_sig, g_walkmanone);
+        decrypt_keysig(g_kas, &g_key, &g_sig, g_walkmanone, g_a50z);
     }
     /* Otherwise require key and signature */
     else if(g_key && g_sig)
@@ -139,7 +140,7 @@ static int get_key_and_sig(bool is_extract, void *buf)
     {
         /* This is useful to print the KAS for the user when brute-forcing since
          * the process will produce a key+sig and the database requires a KAS */
-        encrypt_keysig(&g_kas, g_key, g_sig, g_walkmanone);
+        encrypt_keysig(&g_kas, g_key, g_sig, g_walkmanone, g_a50z);
     }
 
     cprintf(BLUE, "Keys\n");
@@ -519,6 +520,7 @@ static void usage(void)
     printf("  -e/--extract\t\tExtract a UPG archive\n");
     printf("  -c/--create\t\tCreate a UPG archive\n");
     printf("  -w/--walkmanone\t\tUse walkmanOne AES passkey and iv\n");
+    printf("  -b/--a50z\t\tUse a50z AES passkey and iv\n");
     printf("  -z/--compress <idx>\t\t(De)compress file <idx> (starts at 0)\n");
     printf("  -z/--compress <idx>,<md5name>\t\t(De)compress file <idx> and add it to the MD5 file\n");
     printf("When using -z <idx>,<md5name>, the file file size and MD5 prior to compression will\n");
@@ -554,12 +556,13 @@ int main(int argc, char **argv)
             {"extract", no_argument, 0, 'e'},
             {"create", no_argument, 0 ,'c'},
             {"walkmanone", no_argument, 0 ,'w'},
+            {"a50z", no_argument, 0 ,'b'},
             {"threads", required_argument, 0, 't'},
             {"compress", required_argument, 0, 'z'},
             {0, 0, 0, 0}
         };
 
-        int c = getopt_long(argc, argv, "?dwnfo:m:l:a:k:s:ect:z:", long_options, NULL);
+        int c = getopt_long(argc, argv, "?dwnfo:m:l:a:k:s:ect:z:b:", long_options, NULL);
         if(c == -1)
             break;
         switch(c)
@@ -613,6 +616,9 @@ int main(int argc, char **argv)
                 break;
             case 'w':
                 g_walkmanone = true;
+                break;
+            case 'b':
+                g_a50z = true;
                 break;
             case 't':
                 g_nr_threads = strtol(optarg, NULL, 0);

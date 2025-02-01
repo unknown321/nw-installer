@@ -45,6 +45,7 @@ struct nwz_model_t g_model_list[] =
     { "nw-a30", true, "c40d91e7efff3e3aa5c8831dd85526fe4972086283419c8cd8fa3b7dcd39dee4" },
     { "nw-a40", true, "a0d2b1317794074aff77dd2afb9c7aa6b28d6cf24a5e5eb60df87a87eb562de5" },
     { "nw-a50", true, "dd49de9dab2bce5a59090c01049576d537af6a313e5c0a2c24353937a87352d6" },
+    { "nw-a50z", true, "37af6a313e5c0a2c24353937a87352d6dd49de9dab2bce5a59090c01049576d5" },
     { "dmp-z1", true, "2b07114f06d0f63b8ef8e31c8bc9332c7bd70281f7f8d2f80dab58cd36f82c82" },
     /* The following keys were obtained by brute forcing firmware upgrades,
      * someone with a device needs to confirm that they work */
@@ -63,6 +64,9 @@ static uint8_t g_aes_iv[17] = "6063ce1efa1d543a";
 static uint8_t g_aes_passkey_walkman_one[17] = "9cc4419c8bef488e";
 static uint8_t g_aes_iv_walkman_one[17] = "6063ce1efa1d543b";
 
+static uint8_t g_aes_passkey_a50z[17] = "9cc4419c8bef488b";
+static uint8_t g_aes_iv_a50z[17] = "6063ce1efa1d543b";
+
 static int digit_value(char c)
 {
     if(c >= '0' && c <= '9') return c - '0';
@@ -76,7 +80,7 @@ static char hex_digit(unsigned v)
     return (v < 10) ? v + '0' : (v < 16) ? v - 10 + 'a' : 'x';
 }
 
-int decrypt_keysig(const char *kas, char **key, char **sig, bool walkmanone)
+int decrypt_keysig(const char *kas, char **key, char **sig, bool walkmanone, bool a50z)
 {
     int len = strlen(kas);
     if(len % 2)
@@ -109,6 +113,11 @@ int decrypt_keysig(const char *kas, char **key, char **sig, bool walkmanone)
             memcpy(g_aes_iv,g_aes_iv_walkman_one, sizeof g_aes_iv);
         }
 
+        if (a50z) {
+            memcpy(g_aes_passkey, g_aes_passkey_a50z, sizeof g_aes_passkey);
+            memcpy(g_aes_iv,g_aes_iv_a50z, sizeof g_aes_iv);
+        }
+
         aes_cbc_dec_set_key_iv(g_aes_passkey, g_aes_iv);
         aes_cbc_dec(src, len / 2, src);
     }
@@ -125,7 +134,7 @@ int decrypt_keysig(const char *kas, char **key, char **sig, bool walkmanone)
     return 0;
 }
 
-void encrypt_keysig(char **kas, const char *key, const char *sig, bool walkmanone)
+void encrypt_keysig(char **kas, const char *key, const char *sig, bool walkmanone, bool a50z)
 {
     int len = strlen(key);
     if(len != strlen(sig))
@@ -143,6 +152,11 @@ void encrypt_keysig(char **kas, const char *key, const char *sig, bool walkmanon
         if (walkmanone) {
             memcpy(g_aes_passkey, g_aes_passkey_walkman_one, sizeof g_aes_passkey);
             memcpy(g_aes_iv,g_aes_iv_walkman_one, sizeof g_aes_iv);
+        }
+
+        if (a50z) {
+            memcpy(g_aes_passkey, g_aes_passkey_a50z, sizeof g_aes_passkey);
+            memcpy(g_aes_iv,g_aes_iv_a50z, sizeof g_aes_iv);
         }
 
         aes_cbc_enc_set_key_iv(g_aes_passkey, g_aes_iv);

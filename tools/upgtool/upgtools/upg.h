@@ -180,9 +180,9 @@ struct upg_file_t
 
 /* Decrypt a KAS into a key and signature, return <0 if the KAS contains a non-hex
  * character. The function will allocate key and sig if *key and/or *sig is NULL */
-int decrypt_keysig(const char *kas, char **key, char **sig, bool walkmanone);
+int decrypt_keysig(const char *kas, char **key, char **sig, bool walkmanone, bool a50z);
 /* Encrypt a key and signature into a KAS, it will allocate kas if *kas is NULL */
-void encrypt_keysig(char **kas, const char *key, const char *sig, bool walkmanone);
+void encrypt_keysig(char **kas, const char *key, const char *sig, bool walkmanone, bool a50z);
 
 /* Read a UPG file: return a structure on a success or NULL on error.
  * Note that the memory buffer is modified to perform in-place decryption. */

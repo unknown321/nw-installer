@@ -1,5 +1,6 @@
 #!/bin/sh
 
+echo "------ flag reset ------"
 nvpflag fup -1
 ##################################
 echo "------ DEFINITION ------"
@@ -101,6 +102,13 @@ detectModel() {
         MODEL=nw-wm1z
         ;;
     esac
+
+    KAS=$(nvpstr kas)
+    if test $KAS == "37af6a313e5c0a2c24353937a87352d6dd49de9dab2bce5a59090c01049576d5"; then
+        MODEL=nw-a50z
+        WALKMAN_ONE_FLAG="--a50z"
+    fi
+
     log "Model: $MODEL"
   fi
 }

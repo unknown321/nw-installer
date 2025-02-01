@@ -60,11 +60,15 @@ walkmanOne:
 	$(MAKE) OUTDIR=$@ W1FLAG=-w MODEL=nw-wm1a upg
 	$(MAKE) OUTDIR=windows/$@ W1FLAG=-w MODEL=nw-wm1a upgwindows
 
+a50z:
+	$(MAKE) OUTDIR=$@ W1FLAG=--a50z MODEL=nw-a50z upg
+	$(MAKE) OUTDIR=windows/$@ W1FLAG=--a50z MODEL=nw-a50z upgwindows
+
 # file order is important
 # see install.sh:unpack()
 upg:
 	mkdir -p $(OUTDIR) && \
-	$(UPGTOOL) -c $(W1FLAG) $(OUTDIR)/NW_WM_FW.UPG -m $(MODEL) \
+	$(UPGTOOL) -c $(OUTDIR)/NW_WM_FW.UPG -m $(MODEL) $(W1FLAG) \
 		install.sh \
 		empty.txt \
 		bin/cpiostrip-linux-arm5 \
@@ -79,7 +83,7 @@ upg:
 # userdata is put on /contents to prevent duplication in exe
 upgwindows:
 	mkdir -p $(OUTDIR) && \
-	$(UPGTOOL) -c $(W1FLAG) $(OUTDIR)/NW_WM_FW.UPG -m $(MODEL) \
+	$(UPGTOOL) -c $(OUTDIR)/NW_WM_FW.UPG -m $(MODEL) $(W1FLAG) \
 		install.sh \
 		empty.txt \
 		bin/cpiostrip-linux-arm5 \
@@ -101,6 +105,7 @@ upgwindows:
 clean:
 	-rm -rf walkmanOne/ \
 		nw* \
+		a50z \
 		windows/walkmanOne/ \
 		windows/nw* \
 		*.upx \
@@ -115,4 +120,4 @@ veryclean: clean
 build: prepare
 
 .DEFAULT_GOAL := $(MODEL)
-.PHONY: prepare stock walkmanOne upg upgwindows
+.PHONY: prepare stock walkmanOne upg upgwindows a50z
