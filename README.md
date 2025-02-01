@@ -77,6 +77,8 @@ $ make
 tree -P "*.UPG" --noreport installer/
 installer/
 ├── bin
+├── a50z
+│   └── NW_WM_FW.UPG
 ├── nw-a30
 │   └── NW_WM_FW.UPG
 ├── nw-a40
@@ -87,7 +89,7 @@ installer/
      └── NW_WM_FW.UPG
 ```
 
-Produces Walkman One, A50/40/30 `UPG` files and Windows installer (A30 is disabled). Windows installer indicates that
+Produces Walkman One, A50(Z)/40/30 `UPG` files and Windows installer (A30 is disabled). Windows installer indicates that
 only A40 mod is supported:
 
 ```shell
