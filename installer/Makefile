@@ -56,13 +56,21 @@ windows/$(MODEL)/NW_WM_FW.UPG:
 
 $(MODEL): $(MODEL)/NW_WM_FW.UPG windows/$(MODEL)/NW_WM_FW.UPG
 
-walkmanOne:
-	$(MAKE) OUTDIR=$@ W1FLAG=-w MODEL=nw-wm1a upg
-	$(MAKE) OUTDIR=windows/$@ W1FLAG=-w MODEL=nw-wm1a upgwindows
+walkmanOne: walkmanOne/NW_WM_FW.UPG windows/walkmanOne/NW_WM_FW.UPG
 
-a50z:
-	$(MAKE) OUTDIR=$@ W1FLAG=--a50z MODEL=nw-a50z upg
-	$(MAKE) OUTDIR=windows/$@ W1FLAG=--a50z MODEL=nw-a50z upgwindows
+walkmanOne/NW_WM_FW.UPG:
+	$(MAKE) OUTDIR=walkmanOne W1FLAG=-w MODEL=nw-wm1a upg
+
+windows/walkmanOne/NW_WM_FW.UPG:
+	$(MAKE) OUTDIR=windows/walkmanOne W1FLAG=-w MODEL=nw-wm1a upgwindows
+
+a50z: a50z/NW_WM_FW.UPG windows/a50z/NW_WM_FW.UPG
+
+a50z/NW_WM_FW.UPG:
+	$(MAKE) OUTDIR=a50z W1FLAG=--a50z MODEL=nw-a50z upg
+
+windows/a50z/NW_WM_FW.UPG:
+	$(MAKE) OUTDIR=windows/a50z W1FLAG=--a50z MODEL=nw-a50z upgwindows
 
 # file order is important
 # see install.sh:unpack()
@@ -105,6 +113,7 @@ upgwindows:
 clean:
 	-rm -rf walkmanOne/ \
 		nw* \
+		dmp-z1 \
 		a50z \
 		windows/walkmanOne/ \
 		windows/nw* \
