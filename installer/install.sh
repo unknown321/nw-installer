@@ -92,14 +92,29 @@ detectModel() {
   else
     MODEL_ID=$(nvpflag -x mid | cut -c1-8)
     case "${MODEL_ID}" in
+      "0x200000")
+        MODEL=nw-wm1a
+        ;;
+      "0x210000")
+        MODEL=nw-wm1z
+        ;;
+      # taken from rockbox, utils,nwztools/database/models.txt
+      "0x230000")
+        MODEL=nw-zx300
+        ;;
+      # taken from rockbox, utils,nwztools/database/models.txt
+      "0x220000")
+        MODEL=nw-a30
+        ;;
       "0x240000")
         MODEL=nw-a40
         ;;
       "0x250000")
         MODEL=nw-a50
         ;;
-      "0x210000")
-        MODEL=nw-wm1z
+      # taken from rockbox, utils,nwztools/database/models.txt
+      "0x260000")
+        MODEL=dmp-z1
         ;;
     esac
 
