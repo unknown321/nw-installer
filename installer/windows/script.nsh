@@ -128,47 +128,52 @@ Function reviewPage
     StrCpy $letterWithoutSlash $USBLetter 2
 FunctionEnd
 
-SectionGroup /e "Currently installed firmware?"
+Section "!Currently installed firmware"
+  SectionIn RO
+SectionEnd
+
     section /o "WalkmanOne" FWWOne
         File "./walkmanOne/NW_WM_FW.UPG"
     sectionEnd
 
-    section $A50text A50Stock
+    section /o $A50text A50Stock
         File "./nw-a50/NW_WM_FW.UPG"
     sectionEnd
 
-    section $A40text A40Stock
+    section /o $A40text A40Stock
         File "./nw-a40/NW_WM_FW.UPG"
     sectionEnd
 
-    section $A30text A30Stock
+    section /o $A30text A30Stock
         File "./nw-a30/NW_WM_FW.UPG"
     sectionEnd
 
-    section $A50Ztext A50Zmod
+    section /o $A50Ztext A50Zmod
         File "./a50z/NW_WM_FW.UPG"
     sectionEnd
 
-    section $WM1Atext WM1AStock
+    section /o $WM1Atext WM1AStock
         File "./nw-wm1a/NW_WM_FW.UPG"
     sectionEnd
 
-    section $WM1Ztext WM1ZStock
+    section /o $WM1Ztext WM1ZStock
         File "./nw-wm1z/NW_WM_FW.UPG"
     sectionEnd
 
-     section $ZX300text ZX300Stock
+     section /o $ZX300text ZX300Stock
          File "./nw-zx300/NW_WM_FW.UPG"
      sectionEnd
 
-     section $DMPZ1text DMPZ1Stock
+     section /o $DMPZ1text DMPZ1Stock
          File "./dmp-z1/NW_WM_FW.UPG"
      sectionEnd
-SectionGroupEnd
 
 var selectGroupAction
 
-SectionGroup /e "Action"
+Section "!Action"
+  SectionIn RO
+SectionEnd
+
     section "Install" ACTION_INSTALL
         File "../userdata.tar.gz"
     sectionEnd
@@ -182,19 +187,15 @@ SectionGroup /e "Action"
         # how did it work on nw-a40 and nw-zx300?
         ExecWait '"$PLUGINSDIR\scsitool-nwz-v27.exe" -d -s nw-a50 $letterWithoutSlash do_fw_upgrade'
     sectionEnd
-SectionGroupEnd
 
 var selectGroup
 
 Function .onSelChange
+
 !insertmacro StartRadioButtons $selectGroup
     !insertmacro RadioButton ${A50Stock}
-    ${If} ${A40} != 0
     !insertmacro RadioButton ${A40Stock}
-    ${EndIf}
-    ${If} ${A30} != 0
     !insertmacro RadioButton ${A30Stock}
-    ${EndIf}
     !insertmacro RadioButton ${FWWOne}
     !insertmacro RadioButton ${A50Zmod}
     !insertmacro RadioButton ${WM1AStock}
@@ -258,31 +259,31 @@ Function .onInit
     ${EndIf}
 
     ${If} ${A30} != 0
-    StrCpy $A30text "NW-A30"
+        StrCpy $A30text "NW-A30"
     ${EndIf}
 
     ${If} ${A50} != 0
-    StrCpy $A50text "NW-A50"
+        StrCpy $A50text "NW-A50"
     ${EndIf}
 
     ${If} ${WM1A} != 0
-    StrCpy $WM1Atext "NW-WM1A"
+        StrCpy $WM1Atext "NW-WM1A"
     ${EndIf}
 
     ${If} ${WM1Z} != 0
-    StrCpy $WM1Ztext "NW-WM1Z"
+        StrCpy $WM1Ztext "NW-WM1Z"
     ${EndIf}
 
     ${If} ${ZX300} != 0
-    StrCpy $ZX300text "NW-ZX300"
+        StrCpy $ZX300text "NW-ZX300"
     ${EndIf}
 
     ${If} ${DMPZ1} != 0
-    StrCpy $DMPZ1text "DMP-Z1"
+        StrCpy $DMPZ1text "DMP-Z1"
     ${EndIf}
 
     ${If} ${A50Z} != 0
-    StrCpy $A50Ztext "NW-A50 with A50Z mod"
+        StrCpy $A50Ztext "NW-A50 with A50Z mod"
     ${EndIf}
 
 FunctionEnd
