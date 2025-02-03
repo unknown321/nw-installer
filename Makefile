@@ -1,8 +1,14 @@
 ECHO=/bin/echo
 IMAGE=nw-crosstool
 DOCKER=docker run -t --rm -v `pwd`:`pwd` -w `pwd` $(IMAGE)
-A40 ?= 1
+A50 ?= 1
 A30 ?= 1
+A40 ?= 1
+A50Z ?= 1
+WM1A ?= 1
+WM1Z ?= 1
+ZX300 ?= 1
+DMPZ1 ?= 1
 A40MOD_ONLY ?= 0
 USERDATA_FILENAME ?= userdata.tar.gz
 
@@ -42,6 +48,6 @@ build: prepare
 	$(MAKE) -C installer a50z USERDATA_FILENAME=$(USERDATA_FILENAME)
 
 win:
-	$(DOCKER) $(MAKE) -C installer/windows OUTFILE=$(OUTFILE) APPNAME=$(APPNAME) A40=$(A40) A30=$(A30) A40MOD_ONLY=$(A40MOD_ONLY) USERDATA_FILENAME=$(USERDATA_FILENAME)
+	$(DOCKER) $(MAKE) -C installer/windows OUTFILE=$(OUTFILE) APPNAME=$(APPNAME) A40=$(A40) A30=$(A30) A40MOD_ONLY=$(A40MOD_ONLY) A50=$(A50) A50Z=$(A50Z) WM1A=$(WM1A) WM1Z=$(WM1Z) ZX300=$(ZX300) DMPZ1=$(DMPZ1) USERDATA_FILENAME=$(USERDATA_FILENAME)
 
 .DEFAULT_GOAL := build

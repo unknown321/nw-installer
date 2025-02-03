@@ -17,8 +17,14 @@ Page instfiles
 
 Var USBLetter
 Var USBLabel
+Var A50text
 Var A40text
 Var A30text
+Var WM1Atext
+Var WM1Ztext
+Var ZX300text
+Var DMPZ1text
+Var A50Ztext
 
 !define GetUSB "!insertmacro _GetUSB"
 !define GetUSBLabel "!insertmacro _GetUSBLabel"
@@ -127,7 +133,7 @@ SectionGroup /e "Currently installed firmware?"
         File "./walkmanOne/NW_WM_FW.UPG"
     sectionEnd
 
-    section "NW-A50 stock firmware" A50Stock
+    section $A50text A50Stock
         File "./nw-a50/NW_WM_FW.UPG"
     sectionEnd
 
@@ -139,9 +145,25 @@ SectionGroup /e "Currently installed firmware?"
         File "./nw-a30/NW_WM_FW.UPG"
     sectionEnd
 
-    section "NW-A50 with A50Z mod" A50Z
+    section $A50Ztext A50Zmod
         File "./a50z/NW_WM_FW.UPG"
     sectionEnd
+
+    section $WM1Atext WM1AStock
+        File "./nw-wm1a/NW_WM_FW.UPG"
+    sectionEnd
+
+    section $WM1Ztext WM1ZStock
+        File "./nw-wm1z/NW_WM_FW.UPG"
+    sectionEnd
+
+     section $ZX300text ZX300Stock
+         File "./nw-zx300/NW_WM_FW.UPG"
+     sectionEnd
+
+     section $DMPZ1text DMPZ1Stock
+         File "./dmp-z1/NW_WM_FW.UPG"
+     sectionEnd
 SectionGroupEnd
 
 var selectGroupAction
@@ -174,7 +196,11 @@ Function .onSelChange
     !insertmacro RadioButton ${A30Stock}
     ${EndIf}
     !insertmacro RadioButton ${FWWOne}
-    !insertmacro RadioButton ${A50Z}
+    !insertmacro RadioButton ${A50Zmod}
+    !insertmacro RadioButton ${WM1AStock}
+    !insertmacro RadioButton ${WM1ZStock}
+    !insertmacro RadioButton ${ZX300Stock}
+    !insertmacro RadioButton ${DMPZ1Stock}
 !insertmacro EndRadioButtons
 
 !insertmacro StartRadioButtons $selectGroupAction
@@ -207,21 +233,56 @@ Function .onInit
     SectionSetFlags ${A40Stock} 0
     SectionSetFlags ${A30Stock} 0
     SectionSetFlags ${FWWOne} 0
-    SectionSetFlags ${A50Z} 0
+    SectionSetFlags ${A50Zmod} 0
+    SectionSetFlags ${WM1AStock} 0
+    SectionSetFlags ${WM1ZStock} 0
+    SectionSetFlags ${ZX300Stock} 0
+    SectionSetFlags ${DMPZ1Stock} 0
     StrCpy $selectGroup ${A50Stock}
 
+    StrCpy $A50text ""
     StrCpy $A40text ""
     StrCpy $A30text ""
+    StrCpy $WM1Atext ""
+    StrCpy $WM1Ztext ""
+    StrCpy $ZX300text ""
+    StrCpy $DMPZ1text ""
+    StrCpy $A50Ztext ""
 
     ${If} ${A40} != 0
         ${If} ${A40MOD_ONLY} == 1
-            StrCpy $A40text "NW-A40 with A50 mod"
+            StrCpy $A40text "NW-A40 with A50 mod only"
         ${Else}
-            StrCpy $A40text "NW-A40 stock firmware (or A50 mod)"
+            StrCpy $A40text "NW-A40 (or A50 mod)"
         ${EndIf}
     ${EndIf}
 
     ${If} ${A30} != 0
-    StrCpy $A30text "NW-A30 stock firmware"
+    StrCpy $A30text "NW-A30"
     ${EndIf}
+
+    ${If} ${A50} != 0
+    StrCpy $A50text "NW-A50"
+    ${EndIf}
+
+    ${If} ${WM1A} != 0
+    StrCpy $WM1Atext "NW-WM1A"
+    ${EndIf}
+
+    ${If} ${WM1Z} != 0
+    StrCpy $WM1Ztext "NW-WM1Z"
+    ${EndIf}
+
+    ${If} ${ZX300} != 0
+    StrCpy $ZX300text "NW-ZX300"
+    ${EndIf}
+
+    ${If} ${DMPZ1} != 0
+    StrCpy $DMPZ1text "DMP-Z1"
+    ${EndIf}
+
+    ${If} ${A50Z} != 0
+    StrCpy $A50Ztext "NW-A50 with A50Z mod"
+    ${EndIf}
+
 FunctionEnd

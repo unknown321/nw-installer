@@ -108,6 +108,9 @@ clean:
 		a50z \
 		windows/walkmanOne/ \
 		windows/nw* \
+		windows/zx300 \
+		windows/a50z \
+		windows/dmp-z1 \
 		*.upx \
 		userdata.tar.gz \
 		userdata.uninstaller.tar.gz

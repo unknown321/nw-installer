@@ -61,9 +61,15 @@ You can provide following arguments to `make`:
 - `USERDATA_FILENAME`: custom name for `userdata.tar.gz` used in UPG files (not for Windows)
 - `OUTFILE`: sets Windows installer name
 - `APPNAME`: sets application name in installer
+- `A50`: NW-A50 Windows support (default: on)
 - `A40`: NW-A40 Windows support (default: on)
 - `A30`: NW-A30 Windows support (default: on)
-- `A40MOD_ONLY`: Windows installer indicates that NW-A40 firmware should be used only with [A50 mod][1] (default: off)
+- `A50Z`: NW-A50Z (mod) Windows support (default: on)
+- `WM1A`: NW-WM1A Windows support (default: on)
+- `WM1Z`: NW-WM1Z Windows support (default: on)
+- `ZX300`: ZX300 Windows support (default: on)
+- `DMPZ1`: DMP-Z1 Windows support (default: on)
+- `A40MOD_ONLY`: Windows installer indicates that NW-A40 build should be used only with [A50 mod][1] and stock fw is incompatible (default: off)
 
 [1]: https://www.mrwalkman.com/p/nw-a40-stock-update.html
 
