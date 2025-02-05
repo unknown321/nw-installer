@@ -96,7 +96,7 @@ detectModel() {
         MODEL=nw-wm1a
         ;;
       "0x210000")
-        MODEL=nw-wm1z
+        MODEL=nw-wm1a
         ;;
       # taken from rockbox, utils,nwztools/database/models.txt
       "0x230000")

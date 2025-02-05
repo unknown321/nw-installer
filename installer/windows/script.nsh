@@ -20,8 +20,7 @@ Var USBLabel
 Var A50text
 Var A40text
 Var A30text
-Var WM1Atext
-Var WM1Ztext
+Var WM1AZtext
 Var ZX300text
 Var DMPZ1text
 Var A50Ztext
@@ -152,12 +151,8 @@ SectionEnd
         File "./a50z/NW_WM_FW.UPG"
     sectionEnd
 
-    section /o $WM1Atext WM1AStock
+    section /o $WM1AZtext WM1AZStock
         File "./nw-wm1a/NW_WM_FW.UPG"
-    sectionEnd
-
-    section /o $WM1Ztext WM1ZStock
-        File "./nw-wm1z/NW_WM_FW.UPG"
     sectionEnd
 
      section /o $ZX300text ZX300Stock
@@ -198,8 +193,7 @@ Function .onSelChange
     !insertmacro RadioButton ${A30Stock}
     !insertmacro RadioButton ${FWWOne}
     !insertmacro RadioButton ${A50Zmod}
-    !insertmacro RadioButton ${WM1AStock}
-    !insertmacro RadioButton ${WM1ZStock}
+    !insertmacro RadioButton ${WM1AZStock}
     !insertmacro RadioButton ${ZX300Stock}
     !insertmacro RadioButton ${DMPZ1Stock}
 !insertmacro EndRadioButtons
@@ -235,8 +229,7 @@ Function .onInit
     SectionSetFlags ${A30Stock} 0
     SectionSetFlags ${FWWOne} 0
     SectionSetFlags ${A50Zmod} 0
-    SectionSetFlags ${WM1AStock} 0
-    SectionSetFlags ${WM1ZStock} 0
+    SectionSetFlags ${WM1AZStock} 0
     SectionSetFlags ${ZX300Stock} 0
     SectionSetFlags ${DMPZ1Stock} 0
     StrCpy $selectGroup ${A50Stock}
@@ -244,8 +237,7 @@ Function .onInit
     StrCpy $A50text ""
     StrCpy $A40text ""
     StrCpy $A30text ""
-    StrCpy $WM1Atext ""
-    StrCpy $WM1Ztext ""
+    StrCpy $WM1AZtext ""
     StrCpy $ZX300text ""
     StrCpy $DMPZ1text ""
     StrCpy $A50Ztext ""
@@ -266,12 +258,8 @@ Function .onInit
         StrCpy $A50text "NW-A50"
     ${EndIf}
 
-    ${If} ${WM1A} != 0
-        StrCpy $WM1Atext "NW-WM1A"
-    ${EndIf}
-
-    ${If} ${WM1Z} != 0
-        StrCpy $WM1Ztext "NW-WM1Z"
+    ${If} ${WM1AZ} != 0
+        StrCpy $WM1AZtext "NW-WM1A/Z"
     ${EndIf}
 
     ${If} ${ZX300} != 0
