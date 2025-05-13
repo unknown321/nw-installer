@@ -5,8 +5,10 @@ RequestExecutionLevel admin
 PageEx license
     LicenseData LICENSE.txt
 PageExEnd
+Page custom actionEnter "" ": select action"
+Page custom selectDevice "" ": select device"
+Page custom hasw1 "" ": Walkman One installed?"
 Page custom connectUSB connectUSBLeave ": connect device"
-Page components
 Page custom reviewPage "" ": review"
 Page instfiles
 
@@ -15,16 +17,19 @@ Page instfiles
 !include nsDialogs.nsh
 !include sections.nsh
 
+!macro NSD_SetUserData hwnd data
+	nsDialogs::SetUserData ${hwnd} ${data}
+!macroend
+!define NSD_SetUserData `!insertmacro NSD_SetUserData`
+
+!macro NSD_GetUserData hwnd outvar
+	nsDialogs::GetUserData ${hwnd}
+	Pop ${outvar}
+!macroend
+!define NSD_GetUserData `!insertmacro NSD_GetUserData`
+
 Var USBLetter
 Var USBLabel
-Var A50text
-Var A40text
-Var A30text
-Var WM1AZtext
-Var ZX300text
-Var DMPZ1text
-Var A50Ztext
-
 !define GetUSB "!insertmacro _GetUSB"
 !define GetUSBLabel "!insertmacro _GetUSBLabel"
 
@@ -52,6 +57,166 @@ Var ImageCtrl1
 Var BmpHandle1
 Var ImageCtrl2
 Var BmpHandle2
+Var hwnd
+var SelectedAction
+
+Function actionEnter
+	nsDialogs::Create 1018
+	Pop $Dialog
+
+	${If} $Dialog == error
+		Abort
+	${EndIf}
+
+    ${NSD_CreateLabel} 0 0 100% 6% "Select action:"
+
+    ${NSD_CreateRadioButton} 0 12% 40% 6% "Install"
+        Pop $hwnd
+        ${NSD_SetState} $hwnd 1
+        ${NSD_AddStyle} $hwnd ${WS_GROUP}
+        ${NSD_SetUserData} $hwnd 1
+        ${NSD_OnClick} $hwnd actionClick
+
+    ${NSD_CreateRadioButton} 0 20% 40% 6% "Uninstall"
+        Pop $hwnd
+		${NSD_SetUserData} $hwnd 0
+		${NSD_OnClick} $hwnd actionClick
+
+	nsDialogs::Show
+FunctionEnd
+
+Function actionClick
+	Pop $hwnd
+	${NSD_GetUserData} $hwnd $SelectedAction
+FunctionEnd
+
+
+var SelectedDevice
+var heightOffset
+var heightOffsetPercent
+Var A40text
+Function selectDevice
+	nsDialogs::Create 1018
+	Pop $Dialog
+
+	${If} $Dialog == error
+		Abort
+	${EndIf}
+
+    ${NSD_CreateLabel} 0 0 100% 6% "Select device:"
+
+    StrCpy $heightOffset 12
+    StrCpy $heightOffsetPercent "$heightOffset%"
+    ${If} ${A50} != 0
+        ${NSD_CreateRadioButton} 0 $heightOffsetPercent 40% 6% "NW-A50"
+            Pop $hwnd
+            ${NSD_SetState} $hwnd 1
+            ${NSD_AddStyle} $hwnd ${WS_GROUP}
+            ${NSD_SetUserData} $hwnd "a50"
+            ${NSD_OnClick} $hwnd deviceClick
+            IntOp $heightOffset $heightOffset + 8
+            StrCpy $heightOffsetPercent "$heightOffset%"
+    ${EndIf}
+
+    ${If} ${A40} != 0
+        ${If} ${A40MOD_ONLY} == 1
+            StrCpy $A40text "NW-A40 with A50 mod only"
+        ${Else}
+            StrCpy $A40text "NW-A40 (including A50 mod)"
+        ${EndIf}
+
+        ${NSD_CreateRadioButton} 0 $heightOffsetPercent 40% 6% $A40text
+            Pop $hwnd
+            ${NSD_SetUserData} $hwnd "a40"
+            ${NSD_OnClick} $hwnd deviceClick
+            IntOp $heightOffset $heightOffset + 8
+            StrCpy $heightOffsetPercent "$heightOffset%"
+    ${EndIf}
+
+    ${If} ${A30} != 0
+        ${NSD_CreateRadioButton} 0 $heightOffsetPercent 40% 6% "NW-A30"
+            Pop $hwnd
+            ${NSD_SetUserData} $hwnd "a30"
+            ${NSD_OnClick} $hwnd deviceClick
+            IntOp $heightOffset $heightOffset + 8
+            StrCpy $heightOffsetPercent "$heightOffset%"
+    ${EndIf}
+
+    ${If} ${A50Z} != 0
+        ${NSD_CreateRadioButton} 0 $heightOffsetPercent 40% 6% "NW-A50Z"
+            Pop $hwnd
+            ${NSD_SetUserData} $hwnd "a50z"
+            ${NSD_OnClick} $hwnd deviceClick
+            IntOp $heightOffset $heightOffset + 8
+            StrCpy $heightOffsetPercent "$heightOffset%"
+    ${EndIf}
+
+    ${If} ${WM1AZ} != 0
+        ${NSD_CreateRadioButton} 0 $heightOffsetPercent 40% 6% "NW-WM1A/Z"
+            Pop $hwnd
+            ${NSD_SetUserData} $hwnd "wm1az"
+            ${NSD_OnClick} $hwnd deviceClick
+            IntOp $heightOffset $heightOffset + 8
+            StrCpy $heightOffsetPercent "$heightOffset%"
+    ${EndIf}
+
+    ${If} ${ZX300} != 0
+        ${NSD_CreateRadioButton} 0 $heightOffsetPercent 40% 6% "NW-ZX300"
+            Pop $hwnd
+            ${NSD_SetUserData} $hwnd "zx300"
+            ${NSD_OnClick} $hwnd deviceClick
+            IntOp $heightOffset $heightOffset + 8
+            StrCpy $heightOffsetPercent "$heightOffset%"
+    ${EndIf}
+
+    ${If} ${DMPZ1} != 0
+        ${NSD_CreateRadioButton} 0 $heightOffsetPercent 40% 6% "DMP-Z1"
+            Pop $hwnd
+            ${NSD_SetUserData} $hwnd "dmpz1"
+            ${NSD_OnClick} $hwnd deviceClick
+            IntOp $heightOffset $heightOffset + 8
+            StrCpy $heightOffsetPercent "$heightOffset%"
+    ${EndIf}
+
+	nsDialogs::Show
+FunctionEnd
+
+Function deviceClick
+	Pop $hwnd
+	${NSD_GetUserData} $hwnd $SelectedDevice
+FunctionEnd
+
+var HasWalkmanOne
+Function hasw1
+	nsDialogs::Create 1018
+	Pop $Dialog
+
+	${If} $Dialog == error
+		Abort
+	${EndIf}
+
+    ${NSD_CreateLabel} 0 0 100% 6% "Do you have Walkman One installed?"
+
+    ${NSD_CreateRadioButton} 0 12% 40% 6% "Yes"
+        Pop $hwnd
+        ${NSD_AddStyle} $hwnd ${WS_GROUP}
+        ${NSD_SetUserData} $hwnd 1
+        ${NSD_OnClick} $hwnd walkmanOneClick
+
+    ${NSD_CreateRadioButton} 0 20% 40% 6% "No"
+        Pop $hwnd
+        ${NSD_SetState} $hwnd 1
+		${NSD_SetUserData} $hwnd 0
+		${NSD_OnClick} $hwnd walkmanOneClick
+
+	nsDialogs::Show
+FunctionEnd
+
+Function walkmanOneClick
+	Pop $hwnd
+	${NSD_GetUserData} $hwnd $HasWalkmanOne
+FunctionEnd
+
 
 Function connectUSB
 	nsDialogs::Create 1018
@@ -61,15 +226,18 @@ Function connectUSB
 		Abort
 	${EndIf}
 
-	${NSD_CreateBitmap} 0 20 100% 100% ""
+	${NSD_CreateBitmap} 0 40 100% 100% ""
 	Pop $ImageCtrl1
 	${NSD_SetBitmap} $ImageCtrl1 $PLUGINSDIR\device.bmp $BmpHandle1
 
-    ${NSD_CreateBitmap} 0 125 100% 100% ""
+    ${NSD_CreateBitmap} 0 145 100% 100% ""
     Pop $ImageCtrl2
     ${NSD_SetBitmap} $ImageCtrl2 $PLUGINSDIR\explorer.bmp $BmpHandle2
 
-    ${NSD_CreateLabel} 0 0 100% 32u "Connect usb device, turn on USB Mass storage and click 'Next'"
+    ${NSD_CreateLabel} 0 0 100% 32u "Connect usb device, turn on USB Mass storage and click 'Next'."
+    Pop $Label
+
+    ${NSD_CreateLabel} 0 20 100% 32u "Make sure it is called 'WALKMAN'."
     Pop $Label
 
 	nsDialogs::Show
@@ -118,7 +286,7 @@ FunctionEnd
 var letterWithoutSlash
 Function reviewPage
     nsDialogs::Create 1018
-    ${NSD_CreateLabel} 0 0 100% 32u "Installing on $USBLetter, '$USBLabel'"
+    ${NSD_CreateLabel} 0 0 100% 32 "Installing on $USBLetter, '$USBLabel'"
     Pop $Label
     nsDialogs::Show
 
@@ -127,82 +295,55 @@ Function reviewPage
     StrCpy $letterWithoutSlash $USBLetter 2
 FunctionEnd
 
-Section "!Currently installed firmware"
-  SectionIn RO
-SectionEnd
-
-    section /o "WalkmanOne" FWWOne
+Section reviewPageLeave
+    DetailPrint "selected device: $SelectedDevice"
+    ${If} $HasWalkmanOne == 1
         File "./walkmanOne/NW_WM_FW.UPG"
-    sectionEnd
+    ${Else}
+        ${If} $SelectedDevice == "a50"
+            File "./nw-a50/NW_WM_FW.UPG"
+        ${ElseIf} $SelectedDevice == "a40"
+            File "./nw-a40/NW_WM_FW.UPG"
+        ${ElseIf} $SelectedDevice == "a30"
+            File "./nw-a30/NW_WM_FW.UPG"
+        ${ElseIf} $SelectedDevice == "a50z"
+            File "./a50z/NW_WM_FW.UPG"
+        ${ElseIf} $SelectedDevice == "wm1az"
+            File "./nw-wm1a/NW_WM_FW.UPG"
+        ${ElseIf} $SelectedDevice == "zx300"
+             File "./nw-zx300/NW_WM_FW.UPG"
+        ${ElseIf} $SelectedDevice == "dmpz1"
+             File "./dmp-z1/NW_WM_FW.UPG"
+        ${Else}
+            MessageBox mb_iconstop "Invalid model selected"
+            Quit
+        ${EndIf}
+    ${EndIf}
 
-    section /o $A50text A50Stock
-        File "./nw-a50/NW_WM_FW.UPG"
-    sectionEnd
-
-    section /o $A40text A40Stock
-        File "./nw-a40/NW_WM_FW.UPG"
-    sectionEnd
-
-    section /o $A30text A30Stock
-        File "./nw-a30/NW_WM_FW.UPG"
-    sectionEnd
-
-    section /o $A50Ztext A50Zmod
-        File "./a50z/NW_WM_FW.UPG"
-    sectionEnd
-
-    section /o $WM1AZtext WM1AZStock
-        File "./nw-wm1a/NW_WM_FW.UPG"
-    sectionEnd
-
-     section /o $ZX300text ZX300Stock
-         File "./nw-zx300/NW_WM_FW.UPG"
-     sectionEnd
-
-     section /o $DMPZ1text DMPZ1Stock
-         File "./dmp-z1/NW_WM_FW.UPG"
-     sectionEnd
-
-var selectGroupAction
-
-Section "!Action"
-  SectionIn RO
-SectionEnd
-
-    section "Install" ACTION_INSTALL
+    ${If} $SelectedAction == 1
         File "../userdata.tar.gz"
-    sectionEnd
-
-    section "Remove" ACTION_UNINSTALL
+    ${Else}
         File "/oname=userdata.tar.gz" "../userdata.uninstaller.tar.gz"
-    sectionEnd
+    ${EndIf}
 
-    section ""
-        File "/oname=$PLUGINSDIR\scsitool-nwz-v27.exe" "scsitool-nwz-v27.exe"
-        # how did it work on nw-a40 and nw-zx300?
-        ExecWait '"$PLUGINSDIR\scsitool-nwz-v27.exe" -d -s nw-a50 $letterWithoutSlash do_fw_upgrade'
-    sectionEnd
+    StrCpy $0 "$TEMP\output.txt"
+    File "/oname=$PLUGINSDIR\scsitool-nwz-v27.exe" "scsitool-nwz-v27.exe"
+    # how did it work on nw-a40 and nw-zx300?
+    ReadEnvStr $R0 COMSPEC
+    ExecWait '"$R0" /C "$PLUGINSDIR\scsitool-nwz-v27.exe" -d -s nw-a50 $letterWithoutSlash do_fw_upgrade > $0 2>&1'
 
-var selectGroup
-
-Function .onSelChange
-
-!insertmacro StartRadioButtons $selectGroup
-    !insertmacro RadioButton ${A50Stock}
-    !insertmacro RadioButton ${A40Stock}
-    !insertmacro RadioButton ${A30Stock}
-    !insertmacro RadioButton ${FWWOne}
-    !insertmacro RadioButton ${A50Zmod}
-    !insertmacro RadioButton ${WM1AZStock}
-    !insertmacro RadioButton ${ZX300Stock}
-    !insertmacro RadioButton ${DMPZ1Stock}
-!insertmacro EndRadioButtons
-
-!insertmacro StartRadioButtons $selectGroupAction
-    !insertmacro RadioButton ${ACTION_INSTALL}
-    !insertmacro RadioButton ${ACTION_UNINSTALL}
-!insertmacro EndRadioButtons
-FunctionEnd
+    FileOpen $1 "$0" r
+    StrCpy $2 ""
+    ${Do}
+      FileRead $1 $3
+      ${If} ${Errors}
+         ${ExitDo}
+      ${EndIf}
+      DetailPrint "$3"
+    ${Loop}
+    FileClose $1
+    Delete "$0"
+SectionEnd
 
 Function .onInit
     StrCpy $USBLetter ""
@@ -220,58 +361,10 @@ Function .onInit
     File /oname=$PLUGINSDIR\device.bmp "device.bmp"
     File /oname=$PLUGINSDIR\explorer.bmp "explorer.bmp"
 
-    SectionSetFlags ${ACTION_INSTALL} 1
-    SectionSetFlags ${ACTION_UNINSTALL} 0
-    StrCpy $selectGroupAction ${ACTION_INSTALL}
+    StrCpy $SelectedAction 1
+    StrCpy $SelectedDevice "a50"
+    StrCpy $HasWalkmanOne 0
 
-    SectionSetFlags ${A50Stock} 1
-    SectionSetFlags ${A40Stock} 0
-    SectionSetFlags ${A30Stock} 0
-    SectionSetFlags ${FWWOne} 0
-    SectionSetFlags ${A50Zmod} 0
-    SectionSetFlags ${WM1AZStock} 0
-    SectionSetFlags ${ZX300Stock} 0
-    SectionSetFlags ${DMPZ1Stock} 0
-    StrCpy $selectGroup ${A50Stock}
-
-    StrCpy $A50text ""
     StrCpy $A40text ""
-    StrCpy $A30text ""
-    StrCpy $WM1AZtext ""
-    StrCpy $ZX300text ""
-    StrCpy $DMPZ1text ""
-    StrCpy $A50Ztext ""
-
-    ${If} ${A40} != 0
-        ${If} ${A40MOD_ONLY} == 1
-            StrCpy $A40text "NW-A40 with A50 mod only"
-        ${Else}
-            StrCpy $A40text "NW-A40 (or A50 mod)"
-        ${EndIf}
-    ${EndIf}
-
-    ${If} ${A30} != 0
-        StrCpy $A30text "NW-A30"
-    ${EndIf}
-
-    ${If} ${A50} != 0
-        StrCpy $A50text "NW-A50"
-    ${EndIf}
-
-    ${If} ${WM1AZ} != 0
-        StrCpy $WM1AZtext "NW-WM1A/Z"
-    ${EndIf}
-
-    ${If} ${ZX300} != 0
-        StrCpy $ZX300text "NW-ZX300"
-    ${EndIf}
-
-    ${If} ${DMPZ1} != 0
-        StrCpy $DMPZ1text "DMP-Z1"
-    ${EndIf}
-
-    ${If} ${A50Z} != 0
-        StrCpy $A50Ztext "NW-A50 with A50Z mod"
-    ${EndIf}
 
 FunctionEnd
