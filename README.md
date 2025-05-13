@@ -68,10 +68,13 @@ You can provide following arguments to `make`:
 - `WM1AZ`: NW-WM1A/Z Windows support (default: on)
 - `ZX300`: ZX300 Windows support (default: on)
 - `DMPZ1`: DMP-Z1 Windows support (default: on)
-- `A40MOD_ONLY`: Windows installer indicates that NW-A40 build should be used only with [A50 mod][1] and stock fw is
+- `A40MOD_ONLY`: indicates that NW-A40 build must be used only with [A50 mod][1] and stock fw is 
+  incompatible (default: off)
+- `A30MOD_ONLY`: NW-A30 build must be used only with [WalkmanOne][2] and stock fw is
   incompatible (default: off)
 
 [1]: https://www.mrwalkman.com/p/nw-a40-stock-update.html
+[2]: https://www.mrwalkman.com/p/walkman-one-nw-a30series.html
 
 ### Example:
 

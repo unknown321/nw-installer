@@ -95,6 +95,7 @@ var SelectedDevice
 var heightOffset
 var heightOffsetPercent
 Var A40text
+Var A30text
 Function selectDevice
 	nsDialogs::Create 1018
 	Pop $Dialog
@@ -108,7 +109,7 @@ Function selectDevice
     StrCpy $heightOffset 12
     StrCpy $heightOffsetPercent "$heightOffset%"
     ${If} ${A50} != 0
-        ${NSD_CreateRadioButton} 0 $heightOffsetPercent 40% 6% "NW-A50"
+        ${NSD_CreateRadioButton} 0 $heightOffsetPercent 100% 6% "NW-A50"
             Pop $hwnd
             ${NSD_SetState} $hwnd 1
             ${NSD_AddStyle} $hwnd ${WS_GROUP}
@@ -125,7 +126,7 @@ Function selectDevice
             StrCpy $A40text "NW-A40 (including A50 mod)"
         ${EndIf}
 
-        ${NSD_CreateRadioButton} 0 $heightOffsetPercent 40% 6% $A40text
+        ${NSD_CreateRadioButton} 0 $heightOffsetPercent 100% 6% $A40text
             Pop $hwnd
             ${NSD_SetUserData} $hwnd "a40"
             ${NSD_OnClick} $hwnd deviceClick
@@ -134,7 +135,13 @@ Function selectDevice
     ${EndIf}
 
     ${If} ${A30} != 0
-        ${NSD_CreateRadioButton} 0 $heightOffsetPercent 40% 6% "NW-A30"
+        ${If} ${A30MOD_ONLY} == 1
+            StrCpy $A30text "NW-A30 with Walkman One only"
+        ${Else}
+            StrCpy $A30text "NW-A30"
+        ${EndIf}
+
+        ${NSD_CreateRadioButton} 0 $heightOffsetPercent 100% 6% $A30text
             Pop $hwnd
             ${NSD_SetUserData} $hwnd "a30"
             ${NSD_OnClick} $hwnd deviceClick
@@ -143,7 +150,7 @@ Function selectDevice
     ${EndIf}
 
     ${If} ${A50Z} != 0
-        ${NSD_CreateRadioButton} 0 $heightOffsetPercent 40% 6% "NW-A50Z"
+        ${NSD_CreateRadioButton} 0 $heightOffsetPercent 100% 6% "NW-A50Z"
             Pop $hwnd
             ${NSD_SetUserData} $hwnd "a50z"
             ${NSD_OnClick} $hwnd deviceClick
@@ -152,7 +159,7 @@ Function selectDevice
     ${EndIf}
 
     ${If} ${WM1AZ} != 0
-        ${NSD_CreateRadioButton} 0 $heightOffsetPercent 40% 6% "NW-WM1A/Z"
+        ${NSD_CreateRadioButton} 0 $heightOffsetPercent 100% 6% "NW-WM1A/Z"
             Pop $hwnd
             ${NSD_SetUserData} $hwnd "wm1az"
             ${NSD_OnClick} $hwnd deviceClick
@@ -161,7 +168,7 @@ Function selectDevice
     ${EndIf}
 
     ${If} ${ZX300} != 0
-        ${NSD_CreateRadioButton} 0 $heightOffsetPercent 40% 6% "NW-ZX300"
+        ${NSD_CreateRadioButton} 0 $heightOffsetPercent 100% 6% "NW-ZX300"
             Pop $hwnd
             ${NSD_SetUserData} $hwnd "zx300"
             ${NSD_OnClick} $hwnd deviceClick
@@ -170,7 +177,7 @@ Function selectDevice
     ${EndIf}
 
     ${If} ${DMPZ1} != 0
-        ${NSD_CreateRadioButton} 0 $heightOffsetPercent 40% 6% "DMP-Z1"
+        ${NSD_CreateRadioButton} 0 $heightOffsetPercent 100% 6% "DMP-Z1"
             Pop $hwnd
             ${NSD_SetUserData} $hwnd "dmpz1"
             ${NSD_OnClick} $hwnd deviceClick
