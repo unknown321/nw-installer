@@ -12,6 +12,7 @@ WM1AZ ?= 1
 ZX300 ?= 1
 DMPZ1 ?= 1
 A40MOD_ONLY ?= 0
+A30MOD_ONLY ?= 0
 
 $(SCSITOOL):
 	wget $(SCSITOOL_URL)
@@ -27,6 +28,7 @@ $(OUTFILE): LICENSE.txt
 		-DZX300=$(ZX300) \
 		-DDMPZ1=$(DMPZ1) \
 		-DA40MOD_ONLY=$(A40MOD_ONLY) \
+		-DA30MOD_ONLY=$(A30MOD_ONLY) \
 		script.nsh
 
 clean:
