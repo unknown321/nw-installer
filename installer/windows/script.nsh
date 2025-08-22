@@ -8,6 +8,7 @@ PageExEnd
 Page custom actionEnter "" ": select action"
 Page custom selectDevice "" ": select device"
 Page custom hasw1 "" ": Walkman One installed?"
+Page custom considerBackup "" ": consider backup"
 Page custom connectUSB connectUSBLeave ": connect device"
 Page custom reviewPage "" ": review"
 Page instfiles
@@ -30,6 +31,7 @@ Page instfiles
 
 Var USBLetter
 Var USBLabel
+var backupURL
 !define GetUSB "!insertmacro _GetUSB"
 !define GetUSBLabel "!insertmacro _GetUSBLabel"
 
@@ -218,6 +220,28 @@ Function hasw1
 	nsDialogs::Show
 FunctionEnd
 
+Function considerBackup
+	nsDialogs::Create 1018
+	Pop $Dialog
+
+	${If} $Dialog == error
+		Abort
+	${EndIf}
+
+    ${NSD_CreateLabel} 0 0 100% 6% "It would be wise to make a device backup before installation."
+    ${NSD_CreateLabel} 0 0 100% 12% "Backup instructions"
+    Pop $HyperlinkLabel
+    ${NSD_SetTextColor} $HyperlinkLabel 0x0000FF
+    ${NSD_AddStyle} $HyperlinkLabel ${SS_NOTIFY}
+    ${NSD_OnClick} $HyperlinkLabel OnHyperlinkClick
+
+	nsDialogs::Show
+FunctionEnd
+
+Function OnHyperlinkClick
+    ExecShell "open" "$backupURL"
+FunctionEnd
+
 Function walkmanOneClick
 	Pop $hwnd
 	${NSD_GetUserData} $hwnd $HasWalkmanOne
@@ -354,6 +378,7 @@ SectionEnd
 Function .onInit
     StrCpy $USBLetter ""
     StrCpy $USBLabel ""
+    StrCpy $backupURL "https://github.com/unknown321/wampy/blob/master/BACKUP.md"
 
     UserInfo::GetAccountType
     pop $0
