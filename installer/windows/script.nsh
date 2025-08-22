@@ -220,6 +220,7 @@ Function hasw1
 	nsDialogs::Show
 FunctionEnd
 
+Var HyperlinkLabel
 Function considerBackup
 	nsDialogs::Create 1018
 	Pop $Dialog
@@ -229,10 +230,9 @@ Function considerBackup
 	${EndIf}
 
     ${NSD_CreateLabel} 0 0 100% 6% "It would be wise to make a device backup before installation."
-    ${NSD_CreateLabel} 0 0 100% 12% "Backup instructions"
+    ${NSD_CreateButton} 0 12% 100% 12% "Backup instructions (opens in browser)"
     Pop $HyperlinkLabel
-    ${NSD_SetTextColor} $HyperlinkLabel 0x0000FF
-    ${NSD_AddStyle} $HyperlinkLabel ${SS_NOTIFY}
+    ${NSD_AddStyle} $HyperlinkLabel ${SS_CENTER}
     ${NSD_OnClick} $HyperlinkLabel OnHyperlinkClick
 
 	nsDialogs::Show
