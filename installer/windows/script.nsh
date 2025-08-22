@@ -50,15 +50,14 @@ Var USBLabel
   StrCpy $USBLabel $1
 !macroend
 
-!include nsDialogs.nsh
-var Label
+Var Label
 Var Dialog
 Var ImageCtrl1
 Var BmpHandle1
 Var ImageCtrl2
 Var BmpHandle2
 Var hwnd
-var SelectedAction
+Var SelectedAction
 
 Function actionEnter
 	nsDialogs::Create 1018
