@@ -1,5 +1,7 @@
 ECHO=/bin/echo
-IMAGE=nw-crosstool
+REGISTRY=192.168.10.102:5000/unknown/
+TAG=a032942e622f
+IMAGE=$(REGISTRY)nw-crosstool:$(TAG)
 DOCKER=docker run -t --rm -v `pwd`:`pwd` -w `pwd` $(IMAGE)
 A50 ?= 1
 A30 ?= 1
@@ -20,8 +22,8 @@ clean:
 	$(MAKE) -C installer clean
 
 prepare_deps:
-	$(MAKE) -C crosstool
-	docker run -it --rm -v `pwd`:`pwd` -w `pwd` nw-crosstool bash -c "cd tools && make"
+	$(MAKE) -C crosstool IMAGE=$(IMAGE)
+	docker run -it --rm -v `pwd`:`pwd` -w `pwd` $(IMAGE) bash -c "cd tools && make"
 	$(MAKE) -C installer prepare
 
 LICENSE_3rdparty.txt:

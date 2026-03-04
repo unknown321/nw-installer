@@ -1,2 +1,4 @@
+IMAGE ?= nw-crosstool
+
 build:
-	docker build -t nw-crosstool .
+	docker build -t $(IMAGE) .
