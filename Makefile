@@ -1,6 +1,6 @@
 ECHO=/bin/echo
 REGISTRY=192.168.10.102:5000/unknown/
-TAG=a032942e622f
+TAG=1020b970582b
 IMAGE=$(REGISTRY)nw-crosstool:$(TAG)
 DOCKER=docker run -t --rm -v `pwd`:`pwd` -w `pwd` $(IMAGE)
 A50 ?= 1

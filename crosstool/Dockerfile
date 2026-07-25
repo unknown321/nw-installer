@@ -24,6 +24,7 @@ RUN \
 
 COPY config /config
 RUN \
+    --mount=target=/tarballs,type=bind,source=./tarballs \
     mv /config /crosstool-ng-1.26.0/.config && \
     cd /crosstool-ng-1.26.0 && \
     sudo -u user ./configure --enable-local && \
@@ -32,8 +33,9 @@ RUN \
     rm -rf /crosstool-ng-1.26.0
 
 RUN \
-    wget https://go.dev/dl/go1.23.3.linux-amd64.tar.gz && \
-    echo "a0afb9744c00648bafb1b90b4aba5bdb86f424f02f9275399ce0c20b93a2c3a8 go1.23.3.linux-amd64.tar.gz" | sha256sum --check --status && \
-    tar xf go1.23.3.linux-amd64.tar.gz && ln -s /go/bin/go /usr/local/bin/go
+    wget https://go.dev/dl/go1.26.5.linux-amd64.tar.gz && \
+    echo "5c2c3b16caefa1d968a94c1daca04a7ca301a496d9b086e17ad77bb81393f053 go1.26.5.linux-amd64.tar.gz" | sha256sum --check --status && \
+    tar xf go1.26.5.linux-amd64.tar.gz && ln -s /go/bin/go /usr/local/bin/go && \
+    rm *.tar.gz
 COPY entrypoint.sh /
 ENTRYPOINT ["/entrypoint.sh"]
